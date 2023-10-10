@@ -3,6 +3,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import javax.swing.JPanel;
 
 public class MapBuilder extends JPanel{
@@ -17,21 +18,24 @@ public class MapBuilder extends JPanel{
         int yDefaultOffset=30;
         int xDefaultOffset =30;
 
-        int[] xPoints=Hexagon.defaultXPositions(xDefaultOffset);
-        int[] yPoints=Hexagon.defaultYPositions(yDefaultOffset);
+        int[] xPoints=null;
+        int[] yPoints=null;
+
+        xPoints=ShapeConverter.defaultXPositions(xDefaultOffset);
+        yPoints=ShapeConverter.defaultYPositions(yDefaultOffset);
 
         int counter=0;
         for (int i=0;i<750;i++){
 
-            list.add(new Hexagon(xPoints,yPoints));
+            list.add(ShapeConverter.newTile(xPoints,yPoints));
 
-            xPoints=Hexagon.shiftXPoints(xPoints);
-            yPoints=Hexagon.shiftYPoints(yPoints,(i%2==0));
+            xPoints=list.get(0).shiftXPoints(xPoints);
+            yPoints=list.get(0).shiftYPoints(yPoints,(i%2==0));
 
             counter++;
             if (counter==50){
                 counter=0;
-                xPoints=Hexagon.defaultXPositions(xDefaultOffset);
+                xPoints=ShapeConverter.defaultXPositions(xDefaultOffset);
                 yPoints=Arrays.stream(yPoints).map(y->y+30).toArray();
             }
         }

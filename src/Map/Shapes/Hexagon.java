@@ -21,11 +21,11 @@ public class Hexagon extends Shape {
         return Arrays.stream(ret).map(y->y+yOffset).toArray();
     }
 
-    static int[] shiftXPoints(int[] xPoints){
+    public int[] shiftXPoints(int[] xPoints){
         return Arrays.stream(xPoints).map(x->(x+9)).toArray();
     }
 
-    static int[] shiftYPoints(int[] yPoints, boolean evenColumn){
+    public int[] shiftYPoints(int[] yPoints, boolean evenColumn){
         int yOffset=(evenColumn)?15:-15;
         return Arrays.stream(yPoints).map(y->y+yOffset).toArray();
     }
