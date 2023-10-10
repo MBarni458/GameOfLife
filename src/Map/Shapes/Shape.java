@@ -9,6 +9,8 @@ public abstract class Shape extends JPanel {
     Polygon shape;
     Point center;
    boolean active;
+
+   int lineOffset;
     LinkedList<Shape> neighbours;
 
     //These two function is responsible for the coordinates correct place

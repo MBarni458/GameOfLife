@@ -1,23 +1,29 @@
+import org.w3c.dom.events.Event;
+
+import java.awt.*;
+
 //The ShapeConverter's main task is to help the other classes to work with the different kinds of shapes
 public class ShapeConverter {
 
     public static Shape newTile(int[] xPoints,int[] yPoints){
         switch (UserConfiguration.tileShape){
             case Square:{
-                break;
+                return new Square(xPoints,yPoints);
             }
             case Hexagon:
                 return new Hexagon(xPoints,yPoints);
             default:
                 return null;
         }
-        return null;
     }
 
     public static int[] defaultXPositions(int xOffset){
         switch (UserConfiguration.tileShape){
             case Hexagon:{
                 return Hexagon.defaultXPositions(xOffset);
+            }
+            case Square:{
+                return Square.defaultXPositions(xOffset);
             }
         }
         return null;
@@ -27,8 +33,21 @@ public class ShapeConverter {
             case Hexagon:{
                 return Hexagon.defaultYPositions(yOffset);
             }
+            case Square:{
+                return Square.defaultYPositions(yOffset);
+            }
         }
         return null;
+    }
+
+    public static boolean isClicked(Point click, Shape shape){
+        switch (UserConfiguration.tileShape){
+            case Square:
+                return click.distance(((Square)shape).center) <=9;
+            case Hexagon:
+               return click.distance(((Hexagon)shape).center) <=9;
+        }
+        return false;
     }
 
 }

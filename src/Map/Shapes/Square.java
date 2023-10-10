@@ -2,33 +2,31 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
 
-public class Hexagon extends Shape {
+public class Square extends Shape {
     Point center;
-    public Hexagon(int [] xPoints, int [] yPoints){
-        numberOfNodes=6;
-        center = new Point(xPoints[0],yPoints[0]-10);
-        System.out.println(center.x);
+    public Square(int [] xPoints, int [] yPoints){
+        numberOfNodes=4;
+        center = new Point(xPoints[0]+10,yPoints[0]-10);
         shape =new Polygon(xPoints,yPoints,numberOfNodes);
         active=false;
-        lineOffset=30;
+        lineOffset=20;
     }
     public static int[] defaultXPositions(int xOffset){
-        int[] ret =  {0, 9, 9, 0, -9, -9};
+        int[] ret =  {-10,-10,10,10};
         return Arrays.stream(ret).map(x->x+xOffset).toArray();
     }
 
     public static int[] defaultYPositions(int yOffset){
-        int[] ret =  {10, 5, -5, -10, -5, 5};
+        int[] ret =  {10, -10, -10, 10};
         return Arrays.stream(ret).map(y->y+yOffset).toArray();
     }
 
     public int[] shiftXPoints(int[] xPoints){
-        return Arrays.stream(xPoints).map(x->(x+9)).toArray();
+        return Arrays.stream(xPoints).map(x->(x+20)).toArray();
     }
 
     public int[] shiftYPoints(int[] yPoints, boolean evenColumn){
-        int yOffset=(evenColumn)?15:-15;
-        return Arrays.stream(yPoints).map(y->y+yOffset).toArray();
+        return yPoints;
     }
 
     public int[] getXPoints(){

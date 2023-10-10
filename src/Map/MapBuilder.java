@@ -36,7 +36,7 @@ public class MapBuilder extends JPanel{
             if (counter==50){
                 counter=0;
                 xPoints=ShapeConverter.defaultXPositions(xDefaultOffset);
-                yPoints=Arrays.stream(yPoints).map(y->y+30).toArray();
+                yPoints=Arrays.stream(yPoints).map(y->y+list.get(0).lineOffset).toArray();
             }
         }
 
@@ -48,8 +48,7 @@ public class MapBuilder extends JPanel{
             System.out.println("x:"+ e.getPoint().x + " y:"+e.getPoint().y);
             Point click = new Point(e.getX(),e.getY());
             for (Shape element: list){
-                System.out.println("x:"+((Hexagon)element).center.x + " y:"+((Hexagon)element).center.y);
-                if (click.distance(((Hexagon)element).center) <=9){
+                if (ShapeConverter.isClicked(click,element)){
                     element.active=!element.active;
                     repaint();
                     break;
