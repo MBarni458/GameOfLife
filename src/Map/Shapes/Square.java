@@ -1,5 +1,7 @@
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class Square extends Shape {
     Point center;
@@ -10,7 +12,13 @@ public class Square extends Shape {
         active=false;
         yOffset =20;
         xOffset=0;
+        radius=30;
     }
+
+    public void findNeighbours(ArrayList<Shape> container){
+        this.neighbours=container.stream().filter(square -> ((Square)square).center.distance(this.center) <= radius && !((Square)square).center.equals(this.center)).collect(Collectors.toCollection(ArrayList<Shape>::new));
+    }
+
     public static int[] defaultXPositions(int xOffset){
         int[] ret =  {-10,-10,10,10};
         return Arrays.stream(ret).map(x->x+xOffset).toArray();

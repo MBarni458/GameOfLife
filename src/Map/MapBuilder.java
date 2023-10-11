@@ -39,13 +39,14 @@ public class MapBuilder extends JPanel{
                 yPoints=Arrays.stream(yPoints).map(y->y+list.get(0).yOffset).toArray();
             }
         }
-
+        for (Shape element:list){
+            element.findNeighbours(list);
+        }
     }
 
     MouseListener ml = new MouseListener() {
         @Override
         public void mouseClicked(MouseEvent e) {
-            System.out.println("x:"+ e.getPoint().x + " y:"+e.getPoint().y);
             Point click = new Point(e.getX(),e.getY());
             for (Shape element: list){
                 if (ShapeConverter.isClicked(click,element)){

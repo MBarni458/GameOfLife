@@ -1,19 +1,16 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
-//The Shape class is the ancestor of all the shapes of the tiles
-//It makes a much easier to store the different kind of shapes
-public abstract class Shape extends JPanel {
+public abstract  class Shape extends JPanel {
     int numberOfNodes;
     Polygon shape;
     Point center;
    boolean active;
-
+    int radius;
+   int xOffset;
    int yOffset;
-    int xOffset;
-    LinkedList<Shape> neighbours;
-
-    //These two function is responsible for the coordinates correct place
-    public abstract int []shiftXPoints(int[] xPoints);
+    ArrayList<Shape> neighbours;
+    public abstract int[] shiftXPoints(int[] xPoints);
+    public abstract  void findNeighbours(ArrayList<Shape> container);
 }
