@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,11 +6,11 @@ import javax.swing.JPanel;
 
 public class MapBuilder extends JPanel{
 
-    ArrayList<Shape> list = new ArrayList<>();
-
-    public MapBuilder(){
+    ArrayList<Shape> tiles;
+    public MapBuilder(ArrayList<Shape> tiles, MouseListener mouseEvent){
+        this.tiles=tiles;
         setPreferredSize(new Dimension(500, 500));
-        this.addMouseListener(ml);
+        this.addMouseListener(mouseEvent);
 
 
         int yDefaultOffset=30;
@@ -27,61 +26,28 @@ public class MapBuilder extends JPanel{
         int lineCounter=0;
         for (int i=0;i<550;i++){
 
-            list.add(ShapeConverter.newTile(xPoints,yPoints));
+            tiles.add(ShapeConverter.newTile(xPoints,yPoints));
 
-            xPoints=list.get(0).shiftXPoints(xPoints);
+            xPoints=tiles.get(0).shiftXPoints(xPoints);
 
             shapeCounter++;
             if (shapeCounter==25){
                 shapeCounter=0;
                 lineCounter++;
-                xPoints=ShapeConverter.defaultXPositions(xDefaultOffset+((lineCounter%2==0)?0:list.get(0).xOffset/2));
-                yPoints=Arrays.stream(yPoints).map(y->y+list.get(0).yOffset).toArray();
+                xPoints=ShapeConverter.defaultXPositions(xDefaultOffset+((lineCounter%2==0)?0:tiles.get(0).xOffset/2));
+                yPoints=Arrays.stream(yPoints).map(y->y+tiles.get(0).yOffset).toArray();
             }
         }
-        for (Shape element:list){
-            element.findNeighbours(list);
+        for (Shape element:tiles){
+            element.findNeighbours(tiles);
         }
     }
 
-    MouseListener ml = new MouseListener() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            Point click = new Point(e.getX(),e.getY());
-            for (Shape element: list){
-                if (ShapeConverter.isClicked(click,element)){
-                    element.active=!element.active;
-                    repaint();
-                    break;
-                }
-            }
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-
-        }
-    };
 
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        for(Shape element: list){
+        for(Shape element: tiles){
             g.setColor((!element.active)?Color.white:Color.red);
             g.fillPolygon(element.shape);
             g.setColor(Color.black);
