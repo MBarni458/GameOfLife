@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 
 public class MapBuilder extends JPanel{
 
-    ArrayList<Shape> list = new ArrayList<Shape>();
+    ArrayList<Shape> list = new ArrayList<>();
 
     public MapBuilder(){
         setPreferredSize(new Dimension(500, 500));
@@ -17,8 +17,8 @@ public class MapBuilder extends JPanel{
         int yDefaultOffset=30;
         int xDefaultOffset =30;
 
-        int[] xPoints=null;
-        int[] yPoints=null;
+        int[] xPoints;
+        int[] yPoints;
 
         xPoints=ShapeConverter.defaultXPositions(xDefaultOffset);
         yPoints=ShapeConverter.defaultYPositions(yDefaultOffset);
@@ -30,7 +30,6 @@ public class MapBuilder extends JPanel{
             list.add(ShapeConverter.newTile(xPoints,yPoints));
 
             xPoints=list.get(0).shiftXPoints(xPoints);
-            yPoints=list.get(0).shiftYPoints(yPoints,(i%2==0));
 
             shapeCounter++;
             if (shapeCounter==25){

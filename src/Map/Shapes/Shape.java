@@ -16,5 +16,4 @@ public abstract class Shape extends JPanel {
 
     //These two function is responsible for the coordinates correct place
     public abstract int []shiftXPoints(int[] xPoints);
-    public abstract int []shiftYPoints(int[] xPoints, boolean evenLine);
 }

@@ -25,16 +25,5 @@ public class Square extends Shape {
         return Arrays.stream(xPoints).map(x->(x+20)).toArray();
     }
 
-    public int[] shiftYPoints(int[] yPoints, boolean evenColumn){
-        return yPoints;
-    }
-
-    public int[] getXPoints(){
-        return shape.xpoints;
-    }
-    public int[] getYPoints(){
-        return shape.ypoints;
-    }
-
 
 }
