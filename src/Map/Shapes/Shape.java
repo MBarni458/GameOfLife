@@ -10,7 +10,8 @@ public abstract class Shape extends JPanel {
     Point center;
    boolean active;
 
-   int lineOffset;
+   int yOffset;
+    int xOffset;
     LinkedList<Shape> neighbours;
 
     //These two function is responsible for the coordinates correct place

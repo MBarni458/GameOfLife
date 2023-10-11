@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
 
@@ -10,7 +9,8 @@ public class Hexagon extends Shape {
         System.out.println(center.x);
         shape =new Polygon(xPoints,yPoints,numberOfNodes);
         active=false;
-        lineOffset=30;
+        yOffset =16;
+        xOffset=18;
     }
     public static int[] defaultXPositions(int xOffset){
         int[] ret =  {0, 9, 9, 0, -9, -9};
@@ -23,12 +23,11 @@ public class Hexagon extends Shape {
     }
 
     public int[] shiftXPoints(int[] xPoints){
-        return Arrays.stream(xPoints).map(x->(x+9)).toArray();
+        return Arrays.stream(xPoints).map(x->(x+xOffset)).toArray();
     }
 
     public int[] shiftYPoints(int[] yPoints, boolean evenColumn){
-        int yOffset=(evenColumn)?15:-15;
-        return Arrays.stream(yPoints).map(y->y+yOffset).toArray();
+        return yPoints;
     }
 
     public int[] getXPoints(){

@@ -3,7 +3,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import javax.swing.JPanel;
 
 public class MapBuilder extends JPanel{
@@ -24,19 +23,21 @@ public class MapBuilder extends JPanel{
         xPoints=ShapeConverter.defaultXPositions(xDefaultOffset);
         yPoints=ShapeConverter.defaultYPositions(yDefaultOffset);
 
-        int counter=0;
-        for (int i=0;i<750;i++){
+        int shapeCounter=0;
+        int lineCounter=0;
+        for (int i=0;i<550;i++){
 
             list.add(ShapeConverter.newTile(xPoints,yPoints));
 
             xPoints=list.get(0).shiftXPoints(xPoints);
             yPoints=list.get(0).shiftYPoints(yPoints,(i%2==0));
 
-            counter++;
-            if (counter==50){
-                counter=0;
-                xPoints=ShapeConverter.defaultXPositions(xDefaultOffset);
-                yPoints=Arrays.stream(yPoints).map(y->y+list.get(0).lineOffset).toArray();
+            shapeCounter++;
+            if (shapeCounter==25){
+                shapeCounter=0;
+                lineCounter++;
+                xPoints=ShapeConverter.defaultXPositions(xDefaultOffset+((lineCounter%2==0)?0:list.get(0).xOffset/2));
+                yPoints=Arrays.stream(yPoints).map(y->y+list.get(0).yOffset).toArray();
             }
         }
 

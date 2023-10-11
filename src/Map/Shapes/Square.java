@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
 
@@ -9,7 +8,8 @@ public class Square extends Shape {
         center = new Point(xPoints[0]+10,yPoints[0]-10);
         shape =new Polygon(xPoints,yPoints,numberOfNodes);
         active=false;
-        lineOffset=20;
+        yOffset =20;
+        xOffset=0;
     }
     public static int[] defaultXPositions(int xOffset){
         int[] ret =  {-10,-10,10,10};
