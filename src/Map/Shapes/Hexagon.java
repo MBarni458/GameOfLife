@@ -18,7 +18,6 @@ public class Hexagon extends Shape {
 
     public void findNeighbours(ArrayList<Shape> container){
         this.neighbours=container.stream().filter(hexa -> ((Hexagon)hexa).center.distance(this.center) <= radius && !((Hexagon)hexa).center.equals(this.center)).collect(Collectors.toCollection(ArrayList<Shape>::new));
-        System.out.println(neighbours.size());
     }
     public static int[] defaultXPositions(int xOffset){
         int[] ret =  {0, 9, 9, 0, -9, -9};

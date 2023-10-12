@@ -12,15 +12,11 @@ public class MapBuilder extends JPanel{
         setPreferredSize(new Dimension(500, 500));
         this.addMouseListener(mouseEvent);
 
-
         int yDefaultOffset=30;
         int xDefaultOffset =30;
 
-        int[] xPoints;
-        int[] yPoints;
-
-        xPoints=ShapeConverter.defaultXPositions(xDefaultOffset);
-        yPoints=ShapeConverter.defaultYPositions(yDefaultOffset);
+        int[] xPoints=ShapeConverter.defaultXPositions(xDefaultOffset);
+        int[] yPoints=ShapeConverter.defaultYPositions(yDefaultOffset);
 
         int shapeCounter=0;
         int lineCounter=0;
