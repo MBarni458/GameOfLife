@@ -20,14 +20,15 @@ public class MapBuilder extends JPanel{
 
         int shapeCounter=0;
         int lineCounter=0;
-        for (int i=0;i<550;i++){
+        int countOfAllShapes=UserConfiguration.rowsOfTheMap *UserConfiguration.columnsOfTheMap;
+        for (int i=0;i<countOfAllShapes;i++){
 
             tiles.add(ShapeConverter.newTile(xPoints,yPoints));
 
             xPoints=tiles.get(0).shiftXPoints(xPoints);
 
             shapeCounter++;
-            if (shapeCounter==25){
+            if (shapeCounter==UserConfiguration.columnsOfTheMap){
                 shapeCounter=0;
                 lineCounter++;
                 xPoints=ShapeConverter.defaultXPositions(xDefaultOffset+((lineCounter%2==0)?0:tiles.get(0).xOffset/2));
