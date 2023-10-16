@@ -3,10 +3,18 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public abstract  class Shape extends JPanel {
+
+    enum Phases{
+        Active,
+        Inactive,
+        Born,
+        Die
+    }
     int numberOfNodes;
     Polygon shape;
     Point center;
-   boolean active;
+
+    Phases activePhase;
     int radius;
    int xOffset;
    int yOffset;

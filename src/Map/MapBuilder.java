@@ -9,7 +9,7 @@ public class MapBuilder extends JPanel{
     ArrayList<Shape> tiles;
     public MapBuilder(ArrayList<Shape> tiles, MouseListener mouseEvent){
         this.tiles=tiles;
-        setPreferredSize(new Dimension(500, 500));
+        setPreferredSize(new Dimension(800, 500));
         this.addMouseListener(mouseEvent);
 
         int yDefaultOffset=30;
@@ -44,7 +44,7 @@ public class MapBuilder extends JPanel{
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         for(Shape element: tiles){
-            g.setColor((!element.active)?Color.white:Color.red);
+            g.setColor((element.activePhase==Shape.Phases.Inactive)?Color.white:Color.red);
             g.fillPolygon(element.shape);
             g.setColor(Color.black);
             g.drawPolygon(element.shape);

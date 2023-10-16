@@ -9,7 +9,7 @@ public class Square extends Shape {
         numberOfNodes=4;
         center = new Point(xPoints[0]+10,yPoints[0]-10);
         shape =new Polygon(xPoints,yPoints,numberOfNodes);
-        active=false;
+        activePhase=Phases.Inactive;
         yOffset =20;
         xOffset=0;
         radius=30;
