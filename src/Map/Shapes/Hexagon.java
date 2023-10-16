@@ -10,7 +10,7 @@ public class Hexagon extends Shape {
         center = new Point(xPoints[0],yPoints[0]-10);
         System.out.println(center.x);
         shape =new Polygon(xPoints,yPoints,numberOfNodes);
-        active=false;
+        activePhase=Phases.Inactive;
         yOffset =16;
         xOffset=18;
         radius=20;
