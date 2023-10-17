@@ -16,7 +16,6 @@ public class Simulation extends SwingWorker<Void, Void> {
         synchronized (cells){
             while (true) {
                 if (UserConfiguration.activeSimulation){
-                    System.out.println("Ready");
                     for (Shape cell : cells) {
                         long numberOfLivingNeighbours = cell.neighbours.stream().filter(c -> (c.activePhase == Shape.Phases.Active) || (c.activePhase == Shape.Phases.Die)).count();
                         if (numberOfLivingNeighbours == UserConfiguration.optimalPopulation && cell.activePhase!= Shape.Phases.Active) {

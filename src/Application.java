@@ -53,7 +53,7 @@ public class Application {
         userMenu= new UserSettingsMenu();
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, map, userMenu);
-        splitPane.setOneTouchExpandable(true);
+        splitPane.setOneTouchExpandable(false);
         splitPane.setDividerLocation(750);
 
         frame.add(splitPane);

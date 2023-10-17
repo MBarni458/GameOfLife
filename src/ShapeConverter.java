@@ -16,7 +16,6 @@ public class ShapeConverter {
             }
         }
     }
-
     public static int[] defaultXPositions(int xOffset){
         switch (UserConfiguration.tileShape) {
             case Hexagon -> {
