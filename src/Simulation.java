@@ -9,6 +9,7 @@ public class Simulation extends SwingWorker<Void, Void> {
     public Simulation(ArrayList<Shape> cells, MapBuilder map) {
         this.cells = cells;
         this.map=map;
+        cells.add(cells.get(0));
     }
 
     @Override

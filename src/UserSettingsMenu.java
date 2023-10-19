@@ -38,14 +38,10 @@ public class UserSettingsMenu extends JPanel {
             int oldValue=UserConfiguration.rowsOfTheMap;
                 UserConfiguration.rowsOfTheMap=numberOfRowsSlider.getValue();
                 if (oldValue<UserConfiguration.rowsOfTheMap && UserConfiguration.rowsOfTheMap<101){
-                    for (;oldValue<UserConfiguration.rowsOfTheMap;oldValue++){
                         this.map.addNewLine();
-                    }
                 } else {
                     if (UserConfiguration.rowsOfTheMap>0){
-                        for (;oldValue>UserConfiguration.rowsOfTheMap;oldValue--){
                             this.map.removeLine();
-                        }
                     } else {
                         UserConfiguration.rowsOfTheMap=oldValue;
                         numberOfRowsSlider.setValue(UserConfiguration.rowsOfTheMap);
