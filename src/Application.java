@@ -4,11 +4,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-public class Application {
+public class Application{
     public ArrayList<Shape> container = new ArrayList<>();
     public MapBuilder map;
     public UserSettingsMenu userMenu;
-    Simulation simulation;
+    public Simulation simulation;
+    public JFrame frame;
     public MouseListener userInput =new MouseListener() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -39,7 +40,7 @@ public class Application {
 
     public Application(){
 
-        JFrame frame = new JFrame("Game Of Life");
+        frame = new JFrame("Game Of Life");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000,550);
         frame.setLocationRelativeTo(null);
@@ -50,7 +51,7 @@ public class Application {
         simulation =new Simulation(container,map);
         simulation.execute();
 
-        userMenu= new UserSettingsMenu();
+        userMenu= new UserSettingsMenu(map);
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, map, userMenu);
         splitPane.setOneTouchExpandable(false);

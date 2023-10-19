@@ -32,4 +32,9 @@ public class Hexagon extends Shape {
     public int[] shiftXPoints(int[] xPoints){
         return Arrays.stream(xPoints).map(x->(x+xOffset)).toArray();
     }
+
+    public ArrayList<Shape> cellsInTheSameLine(ArrayList<Shape> container){
+        return container.stream().filter(tile->((Hexagon)tile).center.y==this.center.y).collect(Collectors.toCollection(ArrayList::new));
+    }
+
 }

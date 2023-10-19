@@ -33,5 +33,8 @@ public class Square extends Shape {
         return Arrays.stream(xPoints).map(x->(x+20)).toArray();
     }
 
+    public ArrayList<Shape> cellsInTheSameLine(ArrayList<Shape> container){
+        return container.stream().filter(tile->((Square)tile).center.y==this.center.y).collect(Collectors.toCollection(ArrayList::new));
+    }
 
 }
