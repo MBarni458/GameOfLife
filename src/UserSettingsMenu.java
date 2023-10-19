@@ -11,7 +11,7 @@ public class UserSettingsMenu extends JPanel {
         this.map=map;
         JButton startButton = new JButton("Start");
 
-        JSlider numberOfRowsSlider = new JSlider(JSlider.HORIZONTAL, 1, 100, UserConfiguration.rowsOfTheMap);
+        JSlider numberOfRowsSlider = new JSlider(JSlider.HORIZONTAL, 1, 40, UserConfiguration.rowsOfTheMap);
 
         startButton.addActionListener(e -> {
             UserConfiguration.activeSimulation=!UserConfiguration.activeSimulation;
@@ -41,10 +41,14 @@ public class UserSettingsMenu extends JPanel {
             int oldValue=UserConfiguration.rowsOfTheMap;
                 UserConfiguration.rowsOfTheMap=numberOfRowsSlider.getValue();
                 if (oldValue<UserConfiguration.rowsOfTheMap && UserConfiguration.rowsOfTheMap<101){
-                    this.map.addNewLine();
+                    for (;oldValue<UserConfiguration.rowsOfTheMap;oldValue++){
+                        this.map.addNewLine();
+                    }
                 } else {
                     if (UserConfiguration.rowsOfTheMap>0){
-                        this.map.removeLine();
+                        for (;oldValue>UserConfiguration.rowsOfTheMap;oldValue--) {
+                            this.map.removeLine();
+                        }
                     } else {
                         UserConfiguration.rowsOfTheMap=oldValue;
                         numberOfRowsSlider.setValue(UserConfiguration.rowsOfTheMap);
