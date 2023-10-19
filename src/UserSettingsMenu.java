@@ -11,9 +11,12 @@ public class UserSettingsMenu extends JPanel {
         this.map=map;
         JButton startButton = new JButton("Start");
 
+        JSlider numberOfRowsSlider = new JSlider(JSlider.HORIZONTAL, 1, 100, UserConfiguration.rowsOfTheMap);
+
         startButton.addActionListener(e -> {
             UserConfiguration.activeSimulation=!UserConfiguration.activeSimulation;
             startButton.setText((startButton.getText().equals("Start"))?"Stop":"Start");
+            numberOfRowsSlider.setEnabled(!numberOfRowsSlider.isEnabled());
         });
 
         JSlider simulationSpeedSlider = new JSlider(JSlider.HORIZONTAL, 100, 2000, 1000);
@@ -33,15 +36,15 @@ public class UserSettingsMenu extends JPanel {
         JSpinner overPopulationSpinner = new JSpinner(overPopulationModel);
         overPopulationSpinner.addChangeListener(e -> UserConfiguration.overPopulation=Integer.parseInt(overPopulationSpinner.getValue().toString()));
 
-        JSlider numberOfRowsSlider = new JSlider(JSlider.HORIZONTAL, 1, 100, UserConfiguration.rowsOfTheMap);
+
         numberOfRowsSlider.addChangeListener(e -> {
             int oldValue=UserConfiguration.rowsOfTheMap;
                 UserConfiguration.rowsOfTheMap=numberOfRowsSlider.getValue();
                 if (oldValue<UserConfiguration.rowsOfTheMap && UserConfiguration.rowsOfTheMap<101){
-                        this.map.addNewLine();
+                    this.map.addNewLine();
                 } else {
                     if (UserConfiguration.rowsOfTheMap>0){
-                            this.map.removeLine();
+                        this.map.removeLine();
                     } else {
                         UserConfiguration.rowsOfTheMap=oldValue;
                         numberOfRowsSlider.setValue(UserConfiguration.rowsOfTheMap);

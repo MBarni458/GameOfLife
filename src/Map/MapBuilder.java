@@ -56,16 +56,25 @@ public class MapBuilder extends JPanel{
     }
 
     public void addNewLine(){
-        xPoints=tiles.get(0).shape.xpoints;
-        xPoints=ShapeConverter.defaultXPositions(xDefaultOffset+((UserConfiguration.rowsOfTheMap%2!=0)?0:tiles.get(0).xOffset/2));
-        yPoints=Arrays.stream(tiles.get(tiles.size()-1).shape.ypoints).map(y->y+tiles.get(0).yOffset).toArray();
-         for (int i=0;i<UserConfiguration.columnsOfTheMap;i++){
-             tiles.add(ShapeConverter.newTile(xPoints,yPoints));
-             xPoints=tiles.get(0).shiftXPoints(xPoints);
-         }
+        synchronized (tiles){
+            xPoints=tiles.get(0).shape.xpoints;
+            xPoints=ShapeConverter.defaultXPositions(xDefaultOffset+((UserConfiguration.rowsOfTheMap%2!=0)?0:tiles.get(0).xOffset/2));
+            yPoints=Arrays.stream(tiles.get(tiles.size()-1).shape.ypoints).map(y->y+tiles.get(0).yOffset).toArray();
+            for (int i=0;i<UserConfiguration.columnsOfTheMap;i++){
+                tiles.add(ShapeConverter.newTile(xPoints,yPoints));
+                xPoints=tiles.get(0).shiftXPoints(xPoints);
+            }
+            findNeighbours();
+            tiles.notify();
+        }
     }
-    public void removeLine(){
+    public synchronized void removeLine(){
+        synchronized (tiles){
             tiles.removeAll(tiles.get(tiles.size()-1).cellsInTheSameLine(tiles));
+            findNeighbours();
+            tiles.notify();
+        }
+
         }
     @Override
     public void paintComponent(Graphics g){
