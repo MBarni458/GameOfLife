@@ -2,10 +2,7 @@ import java.awt.*;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.stream.Collectors;
 import javax.swing.JPanel;
-
 public class MapBuilder extends JPanel{
 
     public ArrayList<Shape> tiles;
@@ -37,7 +34,7 @@ public class MapBuilder extends JPanel{
 
             tiles.add(ShapeConverter.newTile(xPoints,yPoints));
 
-            xPoints=tiles.get(0).shiftXPoints(xPoints);
+            xPoints=tiles.get(0).shiftXPoints(xPoints,false);
 
             shapeCounter++;
             if (shapeCounter==UserConfiguration.columnsOfTheMap){
@@ -57,12 +54,12 @@ public class MapBuilder extends JPanel{
 
     public void addNewLine(){
         synchronized (tiles){
-            xPoints=tiles.get(0).shape.xpoints;
+            //xPoints=tiles.get(0).shape.xpoints;
             xPoints=ShapeConverter.defaultXPositions(xDefaultOffset+((UserConfiguration.rowsOfTheMap%2!=0)?0:tiles.get(0).xOffset/2));
             yPoints=Arrays.stream(tiles.get(tiles.size()-1).shape.ypoints).map(y->y+tiles.get(0).yOffset).toArray();
             for (int i=0;i<UserConfiguration.columnsOfTheMap;i++){
                 tiles.add(ShapeConverter.newTile(xPoints,yPoints));
-                xPoints=tiles.get(0).shiftXPoints(xPoints);
+                xPoints=tiles.get(0).shiftXPoints(xPoints,false);
             }
             findNeighbours();
             tiles.notify();
@@ -76,6 +73,33 @@ public class MapBuilder extends JPanel{
         }
 
         }
+
+    public void addNewColumn() {
+        synchronized (tiles) {
+
+            yPoints=tiles.get(0).shape.ypoints;
+            xPoints=tiles.get(tiles.size()-1).shape.xpoints;
+            xPoints=tiles.get(0).shiftXPoints(xPoints,true);
+            if(UserConfiguration.columnsOfTheMap%2!=0 && tiles.get(0).divShapePerCol!=1){
+                yPoints= Arrays.stream(yPoints).map(y->y+tiles.get(0).yOffset).toArray();
+            }
+            for (int i=0;i<UserConfiguration.rowsOfTheMap/tiles.get(0).divShapePerCol;i++){
+                tiles.add(ShapeConverter.newTile(xPoints,yPoints));
+                yPoints=Arrays.stream(yPoints).map(y->y+tiles.get(0).yOffset*tiles.get(0).divShapePerCol).toArray();
+            }
+            findNeighbours();
+            tiles.notify();
+        }
+    }
+    public synchronized void removeColumn(){
+        synchronized (tiles){
+            tiles.removeAll(tiles.get(tiles.size()-1).cellsInTheSameColumn(tiles));
+            findNeighbours();
+            tiles.notify();
+        }
+
+    }
+
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);

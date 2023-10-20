@@ -13,6 +13,7 @@ public class Square extends Shape {
         yOffset =20;
         xOffset=0;
         radius=30;
+        divShapePerCol=1;
     }
 
     public void findNeighbours(ArrayList<Shape> container){
@@ -29,12 +30,16 @@ public class Square extends Shape {
         return Arrays.stream(ret).map(y->y+yOffset).toArray();
     }
 
-    public int[] shiftXPoints(int[] xPoints){
+    public int[] shiftXPoints(int[] xPoints, boolean halfShift){
         return Arrays.stream(xPoints).map(x->(x+20)).toArray();
     }
 
     public ArrayList<Shape> cellsInTheSameLine(ArrayList<Shape> container){
         return container.stream().filter(tile->((Square)tile).center.y==this.center.y).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public ArrayList<Shape> cellsInTheSameColumn(ArrayList<Shape> container){
+        return container.stream().filter(tile->((Square)tile).center.x==this.center.x).collect(Collectors.toCollection(ArrayList::new));
     }
 
 }

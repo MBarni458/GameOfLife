@@ -12,11 +12,13 @@ public class UserSettingsMenu extends JPanel {
         JButton startButton = new JButton("Start");
 
         JSlider numberOfRowsSlider = new JSlider(JSlider.HORIZONTAL, 1, 40, UserConfiguration.rowsOfTheMap);
+        JSlider numberOfColumnsSlider = new JSlider(JSlider.HORIZONTAL, 1, 40, UserConfiguration.columnsOfTheMap);
 
         startButton.addActionListener(e -> {
             UserConfiguration.activeSimulation=!UserConfiguration.activeSimulation;
             startButton.setText((startButton.getText().equals("Start"))?"Stop":"Start");
             numberOfRowsSlider.setEnabled(!numberOfRowsSlider.isEnabled());
+            numberOfColumnsSlider.setEnabled(!numberOfColumnsSlider.isEnabled());
         });
 
         JSlider simulationSpeedSlider = new JSlider(JSlider.HORIZONTAL, 100, 2000, 1000);
@@ -56,8 +58,27 @@ public class UserSettingsMenu extends JPanel {
                 }
             this.map.repaint();
         });
-        numberOfRowsSlider.setMajorTickSpacing(100);
-        numberOfRowsSlider.setMinorTickSpacing(10);
+
+        numberOfColumnsSlider.addChangeListener(e -> {
+            int oldValue=UserConfiguration.columnsOfTheMap;
+            UserConfiguration.columnsOfTheMap=numberOfColumnsSlider.getValue();
+            if (oldValue<UserConfiguration.columnsOfTheMap && UserConfiguration.columnsOfTheMap<101){
+                for (;oldValue<UserConfiguration.columnsOfTheMap;oldValue++){
+                    this.map.addNewColumn();
+                }
+            } else {
+                if (UserConfiguration.columnsOfTheMap>0){
+                    for (;oldValue>UserConfiguration.columnsOfTheMap;oldValue--) {
+                        this.map.removeColumn();
+                    }
+                } else {
+                    UserConfiguration.columnsOfTheMap=oldValue;
+                    numberOfColumnsSlider.setValue(UserConfiguration.columnsOfTheMap);
+                }
+            }
+            this.map.repaint();
+        });
+
 
         this.add(startButton);
         this.add(new JLabel("Simulation Settings",SwingConstants.CENTER));
@@ -72,5 +93,9 @@ public class UserSettingsMenu extends JPanel {
         this.add(new JLabel("Map Settings",SwingConstants.CENTER));
         this.add(new JLabel("Number of Rows",SwingConstants.CENTER));
         this.add(numberOfRowsSlider);
+        this.add(new JLabel("Number of Columns",SwingConstants.CENTER));
+        this.add(numberOfColumnsSlider);
+        this.add(new JLabel("Choose shape",SwingConstants.CENTER));
+
     }
 }
