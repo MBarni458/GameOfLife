@@ -5,7 +5,7 @@ public class UserConfiguration implements Serializable {
         Square,
         Hexagon
     }
-    public static TileShape tileShape = TileShape.Square;
+    public static TileShape tileShape = TileShape.Hexagon;
     public static int rowsOfTheMap=1;
     public static int columnsOfTheMap=1;
     public static int underPopulation=1;

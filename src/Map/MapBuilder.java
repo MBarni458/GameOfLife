@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import javax.swing.JPanel;
 public class MapBuilder extends JPanel{
 
@@ -54,6 +55,7 @@ public class MapBuilder extends JPanel{
 
     public void addNewLine(){
         synchronized (tiles){
+            ShapeConverter.sortTiles(tiles);
             //xPoints=tiles.get(0).shape.xpoints;
             xPoints=ShapeConverter.defaultXPositions(xDefaultOffset+((UserConfiguration.rowsOfTheMap%2!=0)?0:tiles.get(0).xOffset/2));
             yPoints=Arrays.stream(tiles.get(tiles.size()-1).shape.ypoints).map(y->y+tiles.get(0).yOffset).toArray();
@@ -67,6 +69,7 @@ public class MapBuilder extends JPanel{
     }
     public synchronized void removeLine(){
         synchronized (tiles){
+            ShapeConverter.sortTiles(tiles);
             tiles.removeAll(tiles.get(tiles.size()-1).cellsInTheSameLine(tiles));
             findNeighbours();
             tiles.notify();
@@ -76,7 +79,7 @@ public class MapBuilder extends JPanel{
 
     public void addNewColumn() {
         synchronized (tiles) {
-
+            ShapeConverter.sortTiles(tiles);
             yPoints=tiles.get(0).shape.ypoints;
             xPoints=tiles.get(tiles.size()-1).shape.xpoints;
             xPoints=tiles.get(0).shiftXPoints(xPoints,true);
@@ -93,6 +96,7 @@ public class MapBuilder extends JPanel{
     }
     public synchronized void removeColumn(){
         synchronized (tiles){
+            ShapeConverter.sortTiles(tiles);
             tiles.removeAll(tiles.get(tiles.size()-1).cellsInTheSameColumn(tiles));
             findNeighbours();
             tiles.notify();
