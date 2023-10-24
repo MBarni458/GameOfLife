@@ -20,6 +20,14 @@ public class MapBuilder extends JPanel{
         yDefaultOffset=30;
         xDefaultOffset =30;
 
+        createMap();
+
+        //UserConfiguration.columnsOfTheMap*=tiles.get(0).divShapePerCol;
+    }
+
+    public void createMap(){
+        tiles.clear();
+
         xPoints=ShapeConverter.defaultXPositions(xDefaultOffset);
         yPoints=ShapeConverter.defaultYPositions(yDefaultOffset);
 
@@ -30,7 +38,17 @@ public class MapBuilder extends JPanel{
     public void drawMap(){
         int shapeCounter=0;
         int lineCounter=0;
+        //tiles.add(ShapeConverter.newTile(xPoints,yPoints));
+        /*for (int i=0;i< UserConfiguration.rowsOfTheMap;i++){
+            addNewLine();
+        }*/
+
+        tiles.add(ShapeConverter.newTile(xPoints,yPoints));
+
         int countOfAllShapes=UserConfiguration.rowsOfTheMap *UserConfiguration.columnsOfTheMap;
+
+        tiles.remove(0);
+
         for (int i=0;i<countOfAllShapes;i++){
 
             tiles.add(ShapeConverter.newTile(xPoints,yPoints));
@@ -55,10 +73,10 @@ public class MapBuilder extends JPanel{
 
     public void addNewLine(){
         synchronized (tiles){
-            ShapeConverter.sortTiles(tiles);
-            //xPoints=tiles.get(0).shape.xpoints;
+            ShapeConverter.sortTilesByY(tiles);
             xPoints=ShapeConverter.defaultXPositions(xDefaultOffset+((UserConfiguration.rowsOfTheMap%2!=0)?0:tiles.get(0).xOffset/2));
-            yPoints=Arrays.stream(tiles.get(tiles.size()-1).shape.ypoints).map(y->y+tiles.get(0).yOffset).toArray();
+            yPoints=tiles.get(tiles.size()-1).shape.ypoints;
+            yPoints=Arrays.stream(yPoints).map(y->y+tiles.get(0).yOffset).toArray();
             for (int i=0;i<UserConfiguration.columnsOfTheMap;i++){
                 tiles.add(ShapeConverter.newTile(xPoints,yPoints));
                 xPoints=tiles.get(0).shiftXPoints(xPoints,false);
@@ -69,7 +87,7 @@ public class MapBuilder extends JPanel{
     }
     public synchronized void removeLine(){
         synchronized (tiles){
-            ShapeConverter.sortTiles(tiles);
+            ShapeConverter.sortTilesByY(tiles);
             tiles.removeAll(tiles.get(tiles.size()-1).cellsInTheSameLine(tiles));
             findNeighbours();
             tiles.notify();
@@ -77,29 +95,31 @@ public class MapBuilder extends JPanel{
 
         }
 
-    public void addNewColumn() {
+    public void addNewColumn(int parity) {
         synchronized (tiles) {
-            ShapeConverter.sortTiles(tiles);
-            yPoints=tiles.get(0).shape.ypoints;
-            xPoints=tiles.get(tiles.size()-1).shape.xpoints;
-            xPoints=tiles.get(0).shiftXPoints(xPoints,true);
-            if(UserConfiguration.columnsOfTheMap%2!=0 && tiles.get(0).divShapePerCol!=1){
-                yPoints= Arrays.stream(yPoints).map(y->y+tiles.get(0).yOffset).toArray();
-            }
-            for (int i=0;i<UserConfiguration.rowsOfTheMap/tiles.get(0).divShapePerCol;i++){
-                tiles.add(ShapeConverter.newTile(xPoints,yPoints));
-                yPoints=Arrays.stream(yPoints).map(y->y+tiles.get(0).yOffset*tiles.get(0).divShapePerCol).toArray();
-            }
-            findNeighbours();
-            tiles.notify();
+                ShapeConverter.sortTilesByX(tiles);
+                yPoints = tiles.get(0).shape.ypoints;
+                xPoints = tiles.get(tiles.size() - 1).shape.xpoints;
+                xPoints = tiles.get(0).shiftXPoints(xPoints, true);
+
+                if (parity % 2 == 0 && tiles.get(0).divShapePerCol != 1) {
+                    yPoints = Arrays.stream(yPoints).map(y -> y + tiles.get(0).yOffset).toArray();
+                }
+
+                for (int i = 0; i < UserConfiguration.rowsOfTheMap / tiles.get(0).divShapePerCol; i++) {
+                    tiles.add(ShapeConverter.newTile(xPoints, yPoints));
+                    yPoints = Arrays.stream(yPoints).map(y -> y + tiles.get(0).yOffset * tiles.get(0).divShapePerCol).toArray();
+                }
+                findNeighbours();
+                tiles.notify();
         }
     }
     public synchronized void removeColumn(){
         synchronized (tiles){
-            ShapeConverter.sortTiles(tiles);
-            tiles.removeAll(tiles.get(tiles.size()-1).cellsInTheSameColumn(tiles));
-            findNeighbours();
-            tiles.notify();
+                ShapeConverter.sortTilesByX(tiles);
+                tiles.removeAll(tiles.get(tiles.size() - 1).cellsInTheSameColumn(tiles));
+                findNeighbours();
+                tiles.notify();
         }
 
     }

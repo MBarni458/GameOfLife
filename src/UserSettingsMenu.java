@@ -13,6 +13,8 @@ public class UserSettingsMenu extends JPanel {
 
         JSlider numberOfRowsSlider = new JSlider(JSlider.HORIZONTAL, 1, 40, UserConfiguration.rowsOfTheMap);
         JSlider numberOfColumnsSlider = new JSlider(JSlider.HORIZONTAL, 1, 40, UserConfiguration.columnsOfTheMap);
+        numberOfColumnsSlider.setMinorTickSpacing(2);
+        numberOfColumnsSlider.setSnapToTicks(true);
 
         startButton.addActionListener(e -> {
             UserConfiguration.activeSimulation=!UserConfiguration.activeSimulation;
@@ -60,11 +62,13 @@ public class UserSettingsMenu extends JPanel {
         });
 
         numberOfColumnsSlider.addChangeListener(e -> {
+            System.out.println("Front:"+UserConfiguration.columnsOfTheMap);
             int oldValue=UserConfiguration.columnsOfTheMap;
             UserConfiguration.columnsOfTheMap=numberOfColumnsSlider.getValue();
+            System.out.println("Mid:"+UserConfiguration.columnsOfTheMap);
             if (oldValue<UserConfiguration.columnsOfTheMap && UserConfiguration.columnsOfTheMap<101){
-                for (;oldValue<UserConfiguration.columnsOfTheMap;oldValue++){
-                    this.map.addNewColumn();
+                for(;oldValue<UserConfiguration.columnsOfTheMap;oldValue++){
+                        this.map.addNewColumn(oldValue);
                 }
             } else {
                 if (UserConfiguration.columnsOfTheMap>0){
@@ -76,9 +80,31 @@ public class UserSettingsMenu extends JPanel {
                     numberOfColumnsSlider.setValue(UserConfiguration.columnsOfTheMap);
                 }
             }
+            System.out.println("End:"+UserConfiguration.columnsOfTheMap);
             this.map.repaint();
         });
 
+        ButtonGroup shapeSelection = new ButtonGroup();
+        JRadioButton squareRadiobutton = new JRadioButton();
+        squareRadiobutton.setSelected(true);
+        squareRadiobutton.setText("Square");
+        JRadioButton hexagonRadiobutton = new JRadioButton();
+        hexagonRadiobutton.setText("Hexagon");
+
+        shapeSelection.add(squareRadiobutton);
+        shapeSelection.add(hexagonRadiobutton);
+
+        squareRadiobutton.addActionListener(e -> {
+            UserConfiguration.tileShape= UserConfiguration.TileShape.Square;
+            map.createMap();
+            map.repaint();
+        });
+
+        hexagonRadiobutton.addActionListener(e -> {
+            UserConfiguration.tileShape= UserConfiguration.TileShape.Hexagon;
+            map.createMap();
+            map.repaint();
+        });
 
         this.add(startButton);
         this.add(new JLabel("Simulation Settings",SwingConstants.CENTER));
@@ -95,7 +121,8 @@ public class UserSettingsMenu extends JPanel {
         this.add(numberOfRowsSlider);
         this.add(new JLabel("Number of Columns",SwingConstants.CENTER));
         this.add(numberOfColumnsSlider);
-        this.add(new JLabel("Choose shape",SwingConstants.CENTER));
-
+        this.add(new JLabel("Choose shape"));
+        this.add(squareRadiobutton);
+        this.add(hexagonRadiobutton);
     }
 }

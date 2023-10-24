@@ -48,7 +48,53 @@ public class ShapeConverter {
         };
     }
 
-    public static void sortTiles(ArrayList<Shape> container){
+    public static void sortTilesByY(ArrayList<Shape> container){
+        switch (UserConfiguration.tileShape){
+            case Square ->{
+                container.sort(new Comparator<Shape>() {
+                    @Override
+                    public int compare(Shape s1, Shape s2) {
+                        if (((Square)s1).center.y < ((Square)s2).center.y){
+                            return -1;
+                        }
+                        if (((Square)s1).center.y > ((Square)s2).center.y){
+                            return 1;
+                        }
+                        if (((Square)s1).center.x < ((Square)s2).center.x){
+                            return -1;
+                        }
+                        if (((Square)s1).center.x > ((Square)s2).center.x){
+                            return 1;
+                        }
+                        return 0;
+                    }
+                });
+            }
+            case Hexagon ->{
+                container.sort(new Comparator<Shape>() {
+                    @Override
+                    public int compare(Shape s1, Shape s2) {
+                        if (((Hexagon)s1).center.y < ((Hexagon)s2).center.y){
+                            return -1;
+                        }
+                        if (((Hexagon)s1).center.y > ((Hexagon)s2).center.y){
+                            return 1;
+                        }
+                        if (((Hexagon)s1).center.x < ((Hexagon)s2).center.x){
+                            return -1;
+                        }
+                        if (((Hexagon)s1).center.x > ((Hexagon)s2).center.x){
+                            return 1;
+                        }
+                        return 0;
+                    }
+                });
+            }
+        }
+
+    }
+
+    public static void sortTilesByX(ArrayList<Shape> container){
         switch (UserConfiguration.tileShape){
             case Square ->{
                 container.sort(new Comparator<Shape>() {
