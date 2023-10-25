@@ -4,11 +4,11 @@ import java.util.ArrayList;
 public class Simulation extends SwingWorker<Void, Void> {
 
     ArrayList<Shape> cells;
-    MapBuilder mb;
+    MapBuilder map;
 
-    public Simulation(ArrayList<Shape> cells, MapBuilder mb) {
+    public Simulation(ArrayList<Shape> cells, MapBuilder map) {
         this.cells = cells;
-        this.mb=mb;
+        this.map=map;
     }
 
     @Override
@@ -39,13 +39,13 @@ public class Simulation extends SwingWorker<Void, Void> {
                             }
                         }
                     }
+                    map.repaint();
                 }
                 try {
-                    cells.wait(1000);
+                    cells.wait(UserConfiguration.speedOfSimulation);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                mb.repaint();
             }
         }
 

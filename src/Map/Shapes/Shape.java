@@ -11,6 +11,7 @@ public abstract  class Shape extends JPanel {
         Die
     }
     int numberOfNodes;
+    int divShapePerCol;
     Polygon shape;
     Point center;
 
@@ -19,6 +20,8 @@ public abstract  class Shape extends JPanel {
    int xOffset;
    int yOffset;
     ArrayList<Shape> neighbours;
-    public abstract int[] shiftXPoints(int[] xPoints);
+    public abstract int[] shiftXPoints(int[] xPoints,boolean halfShift);
     public abstract  void findNeighbours(ArrayList<Shape> container);
+    public abstract  ArrayList<Shape> cellsInTheSameLine(ArrayList<Shape> container);
+    public abstract  ArrayList<Shape> cellsInTheSameColumn(ArrayList<Shape> container);
 }
