@@ -13,8 +13,6 @@ public class UserSettingsMenu extends JPanel {
 
         JSlider numberOfRowsSlider = new JSlider(JSlider.HORIZONTAL, 1, 40, UserConfiguration.rowsOfTheMap);
         JSlider numberOfColumnsSlider = new JSlider(JSlider.HORIZONTAL, 1, 40, UserConfiguration.columnsOfTheMap);
-        numberOfColumnsSlider.setMinorTickSpacing(2);
-        numberOfColumnsSlider.setSnapToTicks(true);
 
         startButton.addActionListener(e -> {
             UserConfiguration.activeSimulation=!UserConfiguration.activeSimulation;
@@ -62,17 +60,15 @@ public class UserSettingsMenu extends JPanel {
         });
 
         numberOfColumnsSlider.addChangeListener(e -> {
-            System.out.println("Front:"+UserConfiguration.columnsOfTheMap);
-            int oldValue=UserConfiguration.columnsOfTheMap;
+            int oldValue=UserConfiguration.columnsOfTheMap*map.tiles.get(0).divShapePerCol;
             UserConfiguration.columnsOfTheMap=numberOfColumnsSlider.getValue();
-            System.out.println("Mid:"+UserConfiguration.columnsOfTheMap);
-            if (oldValue<UserConfiguration.columnsOfTheMap && UserConfiguration.columnsOfTheMap<101){
-                for(;oldValue<UserConfiguration.columnsOfTheMap;oldValue++){
+            if (oldValue<UserConfiguration.columnsOfTheMap*map.tiles.get(0).divShapePerCol && UserConfiguration.columnsOfTheMap<101){
+                for(;oldValue<UserConfiguration.columnsOfTheMap*map.tiles.get(0).divShapePerCol;oldValue++){
                         this.map.addNewColumn(oldValue);
                 }
             } else {
-                if (UserConfiguration.columnsOfTheMap>0){
-                    for (;oldValue>UserConfiguration.columnsOfTheMap;oldValue--) {
+                if (UserConfiguration.columnsOfTheMap*map.tiles.get(0).divShapePerCol>0){
+                    for (;oldValue>UserConfiguration.columnsOfTheMap*map.tiles.get(0).divShapePerCol;oldValue--) {
                         this.map.removeColumn();
                     }
                 } else {
@@ -80,7 +76,6 @@ public class UserSettingsMenu extends JPanel {
                     numberOfColumnsSlider.setValue(UserConfiguration.columnsOfTheMap);
                 }
             }
-            System.out.println("End:"+UserConfiguration.columnsOfTheMap);
             this.map.repaint();
         });
 

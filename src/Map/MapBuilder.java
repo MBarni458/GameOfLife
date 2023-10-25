@@ -43,12 +43,7 @@ public class MapBuilder extends JPanel{
             addNewLine();
         }*/
 
-        tiles.add(ShapeConverter.newTile(xPoints,yPoints));
-
         int countOfAllShapes=UserConfiguration.rowsOfTheMap *UserConfiguration.columnsOfTheMap;
-
-        tiles.remove(0);
-
         for (int i=0;i<countOfAllShapes;i++){
 
             tiles.add(ShapeConverter.newTile(xPoints,yPoints));
@@ -102,7 +97,7 @@ public class MapBuilder extends JPanel{
                 xPoints = tiles.get(tiles.size() - 1).shape.xpoints;
                 xPoints = tiles.get(0).shiftXPoints(xPoints, true);
 
-                if (parity % 2 == 0 && tiles.get(0).divShapePerCol != 1) {
+                if (parity % 2 != 0 && tiles.get(0).divShapePerCol != 1) {
                     yPoints = Arrays.stream(yPoints).map(y -> y + tiles.get(0).yOffset).toArray();
                 }
 

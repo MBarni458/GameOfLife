@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class Hexagon extends Shape {
-    Point center;
     public Hexagon(int [] xPoints, int [] yPoints){
         numberOfNodes=6;
         center = new Point(xPoints[0],yPoints[0]-10);
