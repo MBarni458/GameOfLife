@@ -4,102 +4,33 @@ import java.awt.*;
 public class UserSettingsMenu extends JPanel {
 
     private MapBuilder map;
+
+    private  JButton startButton;
+    private JSlider numberOfRowsSlider;
+    private JSlider numberOfColumnsSlider;
+    private JSlider simulationSpeedSlider;
+    private JSpinner optimalPopulationSpinner;
+    private JSpinner underPopulationSpinner;
+    private JSpinner overPopulationSpinner;
+    private JRadioButton squareRadiobutton;
+    private JRadioButton hexagonRadiobutton;
     public UserSettingsMenu(MapBuilder map) {
 
         super(new GridLayout(20,2));
 
         this.map=map;
-        JButton startButton = new JButton("Start");
 
-        JSlider numberOfRowsSlider = new JSlider(JSlider.HORIZONTAL, 1, 40, UserConfiguration.rowsOfTheMap);
-        JSlider numberOfColumnsSlider = new JSlider(JSlider.HORIZONTAL, 1, 40, UserConfiguration.columnsOfTheMap);
+        startButton=createStartButton();
+        numberOfRowsSlider= createNumberOfRowsSlider();
+        numberOfColumnsSlider= createNumberOfColumnsSlider();
+        simulationSpeedSlider= createSimulationSpeedSlider();
+        optimalPopulationSpinner= createOptimalPopulationSpinner();
+        underPopulationSpinner= createUnderPopulationSpinner();
+        overPopulationSpinner= createOverPopulationSpinner();
+        squareRadiobutton= createSquareRadioButton();
+        hexagonRadiobutton= createHexagonRadioButton();
+        createShapeSelection();
 
-        startButton.addActionListener(e -> {
-            UserConfiguration.activeSimulation=!UserConfiguration.activeSimulation;
-            startButton.setText((startButton.getText().equals("Start"))?"Stop":"Start");
-            numberOfRowsSlider.setEnabled(!numberOfRowsSlider.isEnabled());
-            numberOfColumnsSlider.setEnabled(!numberOfColumnsSlider.isEnabled());
-        });
-
-        JSlider simulationSpeedSlider = new JSlider(JSlider.HORIZONTAL, 100, 2000, 1000);
-        simulationSpeedSlider.addChangeListener(e -> UserConfiguration.speedOfSimulation=simulationSpeedSlider.getValue());
-        simulationSpeedSlider.setMajorTickSpacing(1900);
-        simulationSpeedSlider.setPaintLabels(true);
-
-        SpinnerModel optimalPopulationModel = new SpinnerNumberModel(UserConfiguration.optimalPopulation, 1, 10, 1);
-        JSpinner optimalPopulationSpinner = new JSpinner(optimalPopulationModel);
-        optimalPopulationSpinner.addChangeListener(e -> UserConfiguration.optimalPopulation=Integer.parseInt(optimalPopulationSpinner.getValue().toString()));
-
-        SpinnerModel underPopulationModel = new SpinnerNumberModel(UserConfiguration.underPopulation, 1, 10, 1);
-        JSpinner underPopulationSpinner = new JSpinner(underPopulationModel);
-        underPopulationSpinner.addChangeListener(e -> UserConfiguration.optimalPopulation=Integer.parseInt(optimalPopulationSpinner.getValue().toString()));
-
-        SpinnerModel overPopulationModel = new SpinnerNumberModel(UserConfiguration.overPopulation, 1, 10, 1);
-        JSpinner overPopulationSpinner = new JSpinner(overPopulationModel);
-        overPopulationSpinner.addChangeListener(e -> UserConfiguration.overPopulation=Integer.parseInt(overPopulationSpinner.getValue().toString()));
-
-
-        numberOfRowsSlider.addChangeListener(e -> {
-            int oldValue=UserConfiguration.rowsOfTheMap;
-                UserConfiguration.rowsOfTheMap=numberOfRowsSlider.getValue();
-                if (oldValue<UserConfiguration.rowsOfTheMap && UserConfiguration.rowsOfTheMap<101){
-                    for (;oldValue<UserConfiguration.rowsOfTheMap;oldValue++){
-                        this.map.addNewLine();
-                    }
-                } else {
-                    if (UserConfiguration.rowsOfTheMap>0){
-                        for (;oldValue>UserConfiguration.rowsOfTheMap;oldValue--) {
-                            this.map.removeLine();
-                        }
-                    } else {
-                        UserConfiguration.rowsOfTheMap=oldValue;
-                        numberOfRowsSlider.setValue(UserConfiguration.rowsOfTheMap);
-                    }
-                }
-            this.map.repaint();
-        });
-
-        numberOfColumnsSlider.addChangeListener(e -> {
-            int oldValue=UserConfiguration.columnsOfTheMap*map.tiles.get(0).divShapePerCol;
-            UserConfiguration.columnsOfTheMap=numberOfColumnsSlider.getValue();
-            if (oldValue<UserConfiguration.columnsOfTheMap*map.tiles.get(0).divShapePerCol && UserConfiguration.columnsOfTheMap<101){
-                for(;oldValue<UserConfiguration.columnsOfTheMap*map.tiles.get(0).divShapePerCol;oldValue++){
-                        this.map.addNewColumn(oldValue);
-                }
-            } else {
-                if (UserConfiguration.columnsOfTheMap*map.tiles.get(0).divShapePerCol>0){
-                    for (;oldValue>UserConfiguration.columnsOfTheMap*map.tiles.get(0).divShapePerCol;oldValue--) {
-                        this.map.removeColumn();
-                    }
-                } else {
-                    UserConfiguration.columnsOfTheMap=oldValue;
-                    numberOfColumnsSlider.setValue(UserConfiguration.columnsOfTheMap);
-                }
-            }
-            this.map.repaint();
-        });
-
-        ButtonGroup shapeSelection = new ButtonGroup();
-        JRadioButton squareRadiobutton = new JRadioButton();
-        squareRadiobutton.setSelected(true);
-        squareRadiobutton.setText("Square");
-        JRadioButton hexagonRadiobutton = new JRadioButton();
-        hexagonRadiobutton.setText("Hexagon");
-
-        shapeSelection.add(squareRadiobutton);
-        shapeSelection.add(hexagonRadiobutton);
-
-        squareRadiobutton.addActionListener(e -> {
-            UserConfiguration.tileShape= UserConfiguration.TileShape.Square;
-            map.createMap();
-            map.repaint();
-        });
-
-        hexagonRadiobutton.addActionListener(e -> {
-            UserConfiguration.tileShape= UserConfiguration.TileShape.Hexagon;
-            map.createMap();
-            map.repaint();
-        });
 
         this.add(startButton);
         this.add(new JLabel("Simulation Settings",SwingConstants.CENTER));
@@ -119,5 +50,117 @@ public class UserSettingsMenu extends JPanel {
         this.add(new JLabel("Choose shape"));
         this.add(squareRadiobutton);
         this.add(hexagonRadiobutton);
+    }
+
+    private JButton createStartButton(){
+        String startText="Start";
+        String stopText="Stop";
+        JButton  tmpStartButton= new JButton(startText);
+        tmpStartButton.addActionListener(e -> {
+            UserConfiguration.setActiveSimulation(!UserConfiguration.activeSimulation);
+            tmpStartButton.setText((tmpStartButton.getText().equals(startText))?stopText:startText);
+            numberOfRowsSlider.setEnabled(!numberOfRowsSlider.isEnabled());
+            numberOfColumnsSlider.setEnabled(!numberOfColumnsSlider.isEnabled());
+        });
+        return tmpStartButton;
+    }
+    private JSlider createNumberOfRowsSlider(){
+        JSlider tmpNumberOfRowsSlider = new JSlider(SwingConstants.HORIZONTAL, 1, 40, UserConfiguration.rowsOfTheMap);
+        tmpNumberOfRowsSlider.addChangeListener(e -> {
+            int oldValue=UserConfiguration.rowsOfTheMap;
+            UserConfiguration.setRowsOfTheMap(tmpNumberOfRowsSlider.getValue());
+            if (oldValue<UserConfiguration.rowsOfTheMap && UserConfiguration.rowsOfTheMap<101){
+                for (;oldValue<UserConfiguration.rowsOfTheMap;oldValue++){
+                    this.map.addNewLine();
+                }
+            } else {
+                if (UserConfiguration.rowsOfTheMap>0){
+                    for (;oldValue>UserConfiguration.rowsOfTheMap;oldValue--) {
+                        this.map.removeLine();
+                    }
+                } else {
+                    UserConfiguration.setRowsOfTheMap(oldValue);
+                    tmpNumberOfRowsSlider.setValue(UserConfiguration.rowsOfTheMap);
+                }
+            }
+            this.map.repaint();
+        });
+        return tmpNumberOfRowsSlider;
+    }
+    private JSlider createNumberOfColumnsSlider(){
+        JSlider tmpNumberOfColumnsSlider = new JSlider(SwingConstants.HORIZONTAL, 1, 40, UserConfiguration.columnsOfTheMap);
+        tmpNumberOfColumnsSlider.addChangeListener(e -> {
+            int oldValue=UserConfiguration.columnsOfTheMap*map.tiles.get(0).divShapePerCol;
+            UserConfiguration.setColumnsOfTheMap(tmpNumberOfColumnsSlider.getValue());
+            if (oldValue<UserConfiguration.columnsOfTheMap*map.tiles.get(0).divShapePerCol && UserConfiguration.columnsOfTheMap<101){
+                for(;oldValue<UserConfiguration.columnsOfTheMap*map.tiles.get(0).divShapePerCol;oldValue++){
+                    this.map.addNewColumn(oldValue);
+                }
+            } else {
+                if (UserConfiguration.columnsOfTheMap*map.tiles.get(0).divShapePerCol>0){
+                    for (;oldValue>UserConfiguration.columnsOfTheMap*map.tiles.get(0).divShapePerCol;oldValue--) {
+                        this.map.removeColumn();
+                    }
+                } else {
+                    UserConfiguration.setColumnsOfTheMap(oldValue);
+                    tmpNumberOfColumnsSlider.setValue(UserConfiguration.columnsOfTheMap);
+                }
+            }
+            this.map.repaint();
+        });
+        return tmpNumberOfColumnsSlider;
+    }
+    private static JSlider createSimulationSpeedSlider(){
+        JSlider tmpSimulationSpeedSlider = new JSlider(SwingConstants.HORIZONTAL, 100, 2000, 1000);
+        tmpSimulationSpeedSlider.addChangeListener(e -> UserConfiguration.speedOfSimulation= tmpSimulationSpeedSlider.getValue());
+        tmpSimulationSpeedSlider.setMajorTickSpacing(1900);
+        tmpSimulationSpeedSlider.setPaintLabels(true);
+        return tmpSimulationSpeedSlider;
+    }
+    private static JSpinner createOptimalPopulationSpinner(){
+        SpinnerModel optimalPopulationModel = new SpinnerNumberModel(UserConfiguration.optimalPopulation, 1, 10, 1);
+        JSpinner tmpOptimalPopulationSpinner = new JSpinner(optimalPopulationModel);
+        tmpOptimalPopulationSpinner.addChangeListener(e -> UserConfiguration.optimalPopulation=Integer.parseInt(tmpOptimalPopulationSpinner.getValue().toString()));
+        return tmpOptimalPopulationSpinner;
+    }
+    private JSpinner createUnderPopulationSpinner(){
+        SpinnerModel underPopulationModel = new SpinnerNumberModel(UserConfiguration.underPopulation, 1, 10, 1);
+        JSpinner tmpUnderPopulationSpinner = new JSpinner(underPopulationModel);
+        tmpUnderPopulationSpinner.addChangeListener(e -> UserConfiguration.setOptimalPopulation(Integer.parseInt(optimalPopulationSpinner.getValue().toString())));
+        return tmpUnderPopulationSpinner;
+    }
+    private static JSpinner createOverPopulationSpinner(){
+        SpinnerModel overPopulationModel = new SpinnerNumberModel(UserConfiguration.overPopulation, 1, 10, 1);
+        JSpinner tmpOverPopulationSpinner = new JSpinner(overPopulationModel);
+        tmpOverPopulationSpinner.addChangeListener(e -> UserConfiguration.overPopulation=Integer.parseInt(tmpOverPopulationSpinner.getValue().toString()));
+        return tmpOverPopulationSpinner;
+    }
+
+    private JRadioButton createSquareRadioButton(){
+        JRadioButton tmpSquareRadiobutton = new JRadioButton();
+        tmpSquareRadiobutton.setSelected(true);
+        tmpSquareRadiobutton.setText("Square");
+        tmpSquareRadiobutton.addActionListener(e -> {
+            UserConfiguration.setTileShape(UserConfiguration.TileShape.SQUARE);
+            map.createMap();
+            map.repaint();
+        });
+        return tmpSquareRadiobutton;
+    }
+    private JRadioButton createHexagonRadioButton(){
+        JRadioButton tmpHexagonRadiobutton = new JRadioButton();
+        tmpHexagonRadiobutton.setText("Hexagon");
+        tmpHexagonRadiobutton.addActionListener(e -> {
+            UserConfiguration.setTileShape(UserConfiguration.TileShape.HEXAGON);
+            map.createMap();
+            map.repaint();
+        });
+        return tmpHexagonRadiobutton;
+    }
+    private ButtonGroup createShapeSelection(){
+        ButtonGroup tmpShapeSelection = new ButtonGroup();
+        tmpShapeSelection.add(squareRadiobutton);
+        tmpShapeSelection.add(hexagonRadiobutton);
+        return tmpShapeSelection;
     }
 }

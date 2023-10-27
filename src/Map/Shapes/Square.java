@@ -1,19 +1,55 @@
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 public class Square extends Shape {
-    Point center;
     public Square(int [] xPoints, int [] yPoints){
         numberOfNodes=4;
         center = new Point(xPoints[0]+10,yPoints[0]-10);
         shape =new Polygon(xPoints,yPoints,numberOfNodes);
-        activePhase=Phases.Inactive;
+        activePhase=Phases.INACTIVE;
         yOffset =20;
         xOffset=0;
         radius=30;
         divShapePerCol=1;
+    }
+
+    public static void sortTilesByY(ArrayList<Shape> cells){
+        cells.sort((s1, s2) -> {
+            if (((Square)s1).center.y < ((Square)s2).center.y){
+                return -1;
+            }
+            if (((Square)s1).center.y > ((Square)s2).center.y){
+                return 1;
+            }
+            if (((Square)s1).center.x < ((Square)s2).center.x){
+                return -1;
+            }
+            if (((Square)s1).center.x > ((Square)s2).center.x){
+                return 1;
+            }
+            return 0;
+        });
+    }
+
+    public static void sortTilesByX(ArrayList<Shape> cells){
+        cells.sort((s1, s2) -> {
+            if (((Square)s1).center.x < ((Square)s2).center.x){
+                return -1;
+            }
+            if (((Square)s1).center.x > ((Square)s2).center.x){
+                return 1;
+            }
+            if (((Square)s1).center.y < ((Square)s2).center.y){
+                return -1;
+            }
+            if (((Square)s1).center.y > ((Square)s2).center.y){
+                return 1;
+            }
+            return 0;
+        });
     }
 
     public void findNeighbours(ArrayList<Shape> container){

@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 public class Hexagon extends Shape {
@@ -8,11 +9,47 @@ public class Hexagon extends Shape {
         numberOfNodes=6;
         center = new Point(xPoints[0],yPoints[0]-10);
         shape =new Polygon(xPoints,yPoints,numberOfNodes);
-        activePhase=Phases.Inactive;
+        activePhase=Phases.INACTIVE;
         yOffset =16;
         xOffset=18;
         radius=20;
         divShapePerCol=2;
+    }
+
+    public static void sortTilesByY(ArrayList<Shape> cells){
+        cells.sort((s1, s2) -> {
+            if (((Hexagon)s1).center.y < ((Hexagon)s2).center.y){
+                return -1;
+            }
+            if (((Hexagon)s1).center.y > ((Hexagon)s2).center.y){
+                return 1;
+            }
+            if (((Hexagon)s1).center.x < ((Hexagon)s2).center.x){
+                return -1;
+            }
+            if (((Hexagon)s1).center.x > ((Hexagon)s2).center.x){
+                return 1;
+            }
+            return 0;
+        });
+    }
+
+    public static void sortTileByX(ArrayList<Shape> cells){
+        cells.sort((s1, s2) -> {
+            if (((Hexagon)s1).center.x < ((Hexagon)s2).center.x){
+                return -1;
+            }
+            if (((Hexagon)s1).center.x > ((Hexagon)s2).center.x){
+                return 1;
+            }
+            if (((Hexagon)s1).center.y < ((Hexagon)s2).center.y){
+                return -1;
+            }
+            if (((Hexagon)s1).center.y > ((Hexagon)s2).center.y){
+                return 1;
+            }
+            return 0;
+        });
     }
 
     public void findNeighbours(ArrayList<Shape> container){
@@ -31,7 +68,6 @@ public class Hexagon extends Shape {
     public int[] shiftXPoints(int[] xPoints,boolean halfShift){
         return Arrays.stream(xPoints).map(x->(x+(halfShift?xOffset/2:xOffset))).toArray();
     }
-
     public ArrayList<Shape> cellsInTheSameLine(ArrayList<Shape> container){
         return container.stream().filter(tile->((Hexagon)tile).center.y==this.center.y).collect(Collectors.toCollection(ArrayList::new));
     }

@@ -1,10 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+
+import static javax.swing.JFrame.*;
 
 public class Application{
     public ArrayList<Shape> container = new ArrayList<>();
@@ -21,29 +21,29 @@ public class Application{
 
         @Override
         public void mousePressed(MouseEvent e) {
-
+            //There is no reason to do anything on this event
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
-
+            //There is no reason to do anything on this event
         }
 
         @Override
         public void mouseEntered(MouseEvent e) {
-
+            //There is no reason to do anything on this event
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-
+            //There is no reason to do anything on this event
         }
     };
 
     public Application(){
 
         frame = new JFrame("Game Of Life");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setSize(1000,550);
         frame.setLocationRelativeTo(null);
 
@@ -69,11 +69,11 @@ public class Application{
         synchronized (container){
             for (Shape element: container){
                 if (ShapeConverter.isClicked(click,element)){
-                    if (element.activePhase == Shape.Phases.Inactive){
-                        element.activePhase = Shape.Phases.Active;
+                    if (element.activePhase == Shape.Phases.INACTIVE){
+                        element.activePhase = Shape.Phases.ACTIVE;
                     }
                     else{
-                        element.activePhase= Shape.Phases.Inactive;
+                        element.activePhase= Shape.Phases.INACTIVE;
                     }
                     break;
                 }

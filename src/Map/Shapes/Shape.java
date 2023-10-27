@@ -4,11 +4,16 @@ import java.util.ArrayList;
 
 public abstract  class Shape extends JPanel {
 
+    //Each Shape has 4 phases
     enum Phases{
-        Active,
-        Inactive,
-        Born,
-        Die
+        //The Shape is Active if it has enough neighbours
+        ACTIVE,
+        //The Shape is Inactive if it doesn't have enough neighbours
+        INACTIVE,
+        //The Born is a temporary phase. It is before the Shape becomes Active
+        BORN,
+        //The Dying is a temporary phase. It is before the Shape becomes Inactive
+        DYING
     }
     int numberOfNodes;
     int divShapePerCol;

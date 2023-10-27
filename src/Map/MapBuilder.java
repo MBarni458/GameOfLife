@@ -2,7 +2,6 @@ import java.awt.*;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import javax.swing.JPanel;
 public class MapBuilder extends JPanel{
 
@@ -21,8 +20,6 @@ public class MapBuilder extends JPanel{
         xDefaultOffset =30;
 
         createMap();
-
-        //UserConfiguration.columnsOfTheMap*=tiles.get(0).divShapePerCol;
     }
 
     public void createMap(){
@@ -38,10 +35,6 @@ public class MapBuilder extends JPanel{
     public void drawMap(){
         int shapeCounter=0;
         int lineCounter=0;
-        //tiles.add(ShapeConverter.newTile(xPoints,yPoints));
-        /*for (int i=0;i< UserConfiguration.rowsOfTheMap;i++){
-            addNewLine();
-        }*/
 
         int countOfAllShapes=UserConfiguration.rowsOfTheMap *UserConfiguration.columnsOfTheMap;
         for (int i=0;i<countOfAllShapes;i++){
@@ -123,7 +116,7 @@ public class MapBuilder extends JPanel{
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         for(Shape element: tiles){
-            g.setColor((element.activePhase==Shape.Phases.Inactive)?Color.white:Color.red);
+            g.setColor((element.activePhase==Shape.Phases.INACTIVE)?Color.white:Color.red);
             g.fillPolygon(element.shape);
             g.setColor(Color.black);
             g.drawPolygon(element.shape);
