@@ -20,6 +20,7 @@ public class UserSettingsMenu extends JPanel {
 
         this.map=map;
 
+        //Create the form elements
         startButton=createStartButton();
         numberOfRowsSlider= createNumberOfRowsSlider();
         numberOfColumnsSlider= createNumberOfColumnsSlider();
@@ -31,7 +32,7 @@ public class UserSettingsMenu extends JPanel {
         hexagonRadiobutton= createHexagonRadioButton();
         createShapeSelection();
 
-
+        //Add the form elements to the panel
         this.add(startButton);
         this.add(new JLabel("Simulation Settings",SwingConstants.CENTER));
         this.add(new JLabel("Speed of Simulation",SwingConstants.CENTER));
@@ -61,6 +62,8 @@ public class UserSettingsMenu extends JPanel {
             tmpStartButton.setText((tmpStartButton.getText().equals(startText))?stopText:startText);
             numberOfRowsSlider.setEnabled(!numberOfRowsSlider.isEnabled());
             numberOfColumnsSlider.setEnabled(!numberOfColumnsSlider.isEnabled());
+            squareRadiobutton.setEnabled(!squareRadiobutton.isEnabled());
+            hexagonRadiobutton.setEnabled(!hexagonRadiobutton.isEnabled());
         });
         return tmpStartButton;
     }
@@ -90,15 +93,15 @@ public class UserSettingsMenu extends JPanel {
     private JSlider createNumberOfColumnsSlider(){
         JSlider tmpNumberOfColumnsSlider = new JSlider(SwingConstants.HORIZONTAL, 1, 40, UserConfiguration.columnsOfTheMap);
         tmpNumberOfColumnsSlider.addChangeListener(e -> {
-            int oldValue=UserConfiguration.columnsOfTheMap*map.tiles.get(0).divShapePerCol;
+            int oldValue=UserConfiguration.columnsOfTheMap*map.tiles.get(0).virtualColumnNumber;
             UserConfiguration.setColumnsOfTheMap(tmpNumberOfColumnsSlider.getValue());
-            if (oldValue<UserConfiguration.columnsOfTheMap*map.tiles.get(0).divShapePerCol && UserConfiguration.columnsOfTheMap<101){
-                for(;oldValue<UserConfiguration.columnsOfTheMap*map.tiles.get(0).divShapePerCol;oldValue++){
+            if (oldValue<UserConfiguration.columnsOfTheMap*map.tiles.get(0).virtualColumnNumber && UserConfiguration.columnsOfTheMap<101){
+                for(; oldValue<UserConfiguration.columnsOfTheMap*map.tiles.get(0).virtualColumnNumber; oldValue++){
                     this.map.addNewColumn(oldValue);
                 }
             } else {
-                if (UserConfiguration.columnsOfTheMap*map.tiles.get(0).divShapePerCol>0){
-                    for (;oldValue>UserConfiguration.columnsOfTheMap*map.tiles.get(0).divShapePerCol;oldValue--) {
+                if (UserConfiguration.columnsOfTheMap*map.tiles.get(0).virtualColumnNumber >0){
+                    for (; oldValue>UserConfiguration.columnsOfTheMap*map.tiles.get(0).virtualColumnNumber; oldValue--) {
                         this.map.removeColumn();
                     }
                 } else {

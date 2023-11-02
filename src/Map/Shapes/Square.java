@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.stream.Collectors;
 
 public class Square extends Shape {
@@ -13,7 +12,7 @@ public class Square extends Shape {
         yOffset =20;
         xOffset=0;
         radius=30;
-        divShapePerCol=1;
+        virtualColumnNumber =1;
     }
 
     public static void sortTilesByY(ArrayList<Shape> cells){
@@ -53,7 +52,11 @@ public class Square extends Shape {
     }
 
     public void findNeighbours(ArrayList<Shape> container){
-        this.neighbours=container.stream().filter(square -> ((Square)square).center.distance(this.center) <= radius && !((Square)square).center.equals(this.center)).collect(Collectors.toCollection(ArrayList<Shape>::new));
+        //This function set the neighbours of the shape.
+        // The shape is a neighbour of this shape if the distance between the centers is less than the radius
+        this.neighbours=container.stream().filter(square -> ((Square)square).center
+        .distance(this.center) <= radius && !((Square)square).center.equals(this.center))
+        .collect(Collectors.toCollection(ArrayList<Shape>::new));
     }
 
     public static int[] defaultXPositions(int xOffset){
@@ -71,11 +74,13 @@ public class Square extends Shape {
     }
 
     public ArrayList<Shape> cellsInTheSameLine(ArrayList<Shape> container){
-        return container.stream().filter(tile->((Square)tile).center.y==this.center.y).collect(Collectors.toCollection(ArrayList::new));
+        return container.stream().filter(tile->((Square)tile).center.y==this.center.y)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public ArrayList<Shape> cellsInTheSameColumn(ArrayList<Shape> container){
-        return container.stream().filter(tile->((Square)tile).center.x==this.center.x).collect(Collectors.toCollection(ArrayList::new));
+        return container.stream().filter(tile->((Square)tile).center.x==this.center.x)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
 }

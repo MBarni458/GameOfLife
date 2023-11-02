@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.stream.Collectors;
 
 public class Hexagon extends Shape {
@@ -13,7 +12,9 @@ public class Hexagon extends Shape {
         yOffset =16;
         xOffset=18;
         radius=20;
-        divShapePerCol=2;
+
+        //The hexagon has a unique kind of columns. It has two real columns next to each other
+        virtualColumnNumber =2;
     }
 
     public static void sortTilesByY(ArrayList<Shape> cells){
@@ -53,7 +54,12 @@ public class Hexagon extends Shape {
     }
 
     public void findNeighbours(ArrayList<Shape> container){
-        this.neighbours=container.stream().filter(hexa -> ((Hexagon)hexa).center.distance(this.center) <= radius && !((Hexagon)hexa).center.equals(this.center)).collect(Collectors.toCollection(ArrayList<Shape>::new));
+        //This function set the neighbours of the shape.
+        // The shape is a neighbour of this shape if the distance between the centers is less than the radius
+        this.neighbours= container.
+                stream().filter(hexa -> ((Hexagon)hexa).center
+                .distance(this.center) <= radius && !((Hexagon)hexa).center.equals(this.center))
+                .collect(Collectors.toCollection(ArrayList<Shape>::new));
     }
     public static int[] defaultXPositions(int xOffset){
         int[] ret =  {0, 9, 9, 0, -9, -9};
@@ -69,11 +75,13 @@ public class Hexagon extends Shape {
         return Arrays.stream(xPoints).map(x->(x+(halfShift?xOffset/2:xOffset))).toArray();
     }
     public ArrayList<Shape> cellsInTheSameLine(ArrayList<Shape> container){
-        return container.stream().filter(tile->((Hexagon)tile).center.y==this.center.y).collect(Collectors.toCollection(ArrayList::new));
+        return container.stream().filter(tile->((Hexagon)tile).center.y==this.center.y)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public ArrayList<Shape> cellsInTheSameColumn(ArrayList<Shape> container){
-        return container.stream().filter(tile->((Hexagon)tile).center.x==this.center.x).collect(Collectors.toCollection(ArrayList::new));
+        return container.stream().filter(tile->((Hexagon)tile).center.x==this.center.x)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
 }

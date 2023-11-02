@@ -5,10 +5,16 @@ public class Simulation extends SwingWorker<Void, Void> {
 
     ArrayList<Shape> cells;
     MapBuilder map;
+    boolean active;
 
     public Simulation(ArrayList<Shape> cells, MapBuilder map) {
         this.cells = cells;
         this.map=map;
+        this.active=true;
+    }
+
+    public void turnOff(){
+        active=false;
     }
 
     protected void setCellsTemporaryStatus(){
@@ -43,9 +49,12 @@ public class Simulation extends SwingWorker<Void, Void> {
     @Override
     protected Void doInBackground() {
         synchronized (cells) {
-            while (true) {
+            while (active) {
                 if (UserConfiguration.activeSimulation) {
+                    //Before the shapes get their final status they got a temporary one
+                    //It is because the final status would change the number of neighbours
                     setCellsTemporaryStatus();
+                    //After every shape has its temporary status it is safe to change them into the finals
                     setCellsFinalStatus();
                     map.repaint();
                 }
@@ -56,5 +65,6 @@ public class Simulation extends SwingWorker<Void, Void> {
                 }
             }
         }
+        return null;
     }
 }
