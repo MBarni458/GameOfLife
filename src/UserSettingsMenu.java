@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 public class UserSettingsMenu extends JPanel {
 
@@ -14,6 +16,8 @@ public class UserSettingsMenu extends JPanel {
     private JSpinner overPopulationSpinner;
     private JRadioButton squareRadiobutton;
     private JRadioButton hexagonRadiobutton;
+    private JButton saveButton;
+    private JButton loadButton;
     public UserSettingsMenu(MapBuilder map) {
 
         super(new GridLayout(20,2));
@@ -31,6 +35,8 @@ public class UserSettingsMenu extends JPanel {
         squareRadiobutton= createSquareRadioButton();
         hexagonRadiobutton= createHexagonRadioButton();
         createShapeSelection();
+        saveButton= createSaveButton();
+        loadButton= createLoadButton();
 
         //Add the form elements to the panel
         this.add(startButton);
@@ -51,6 +57,9 @@ public class UserSettingsMenu extends JPanel {
         this.add(new JLabel("Choose shape"));
         this.add(squareRadiobutton);
         this.add(hexagonRadiobutton);
+        this.add(new JLabel("Import/Export configuration",SwingConstants.CENTER));
+        this.add(saveButton);
+        this.add(loadButton);
     }
 
     private JButton createStartButton(){
@@ -166,4 +175,45 @@ public class UserSettingsMenu extends JPanel {
         tmpShapeSelection.add(hexagonRadiobutton);
         return tmpShapeSelection;
     }
+
+    private JButton createSaveButton(){
+        JButton tmp_saveButton= new JButton("Save");
+        JFileChooser outputChooser= new JFileChooser();
+        tmp_saveButton.addActionListener(e-> {
+            int approvedValue = outputChooser.showSaveDialog(null);
+            if (approvedValue==JFileChooser.APPROVE_OPTION){
+                File output= outputChooser.getSelectedFile();
+                try {
+                    UserConfiguration.saveConfiguration(output);
+                } catch (IOException error){
+                    JDialog ioError = new JDialog();
+                    ioError.add(new JLabel(error.getMessage(),SwingConstants.CENTER));
+                    ioError.show();
+                }
+            }
+        });
+        return tmp_saveButton;
+    }
+
+    private JButton createLoadButton(){
+        JButton tmp_loadButton= new JButton("Load");
+        JFileChooser inputChooser= new JFileChooser();
+        tmp_loadButton.addActionListener(e-> {
+            int approvedValue = inputChooser.showSaveDialog(null);
+            if (approvedValue==JFileChooser.APPROVE_OPTION){
+                File input= inputChooser.getSelectedFile();
+                try {
+                    UserConfiguration.loadConfiguration(input);
+                    Main.deleteApp();
+                    Main.createApp();
+                } catch (IOException error){
+                    JDialog ioError = new JDialog();
+                    ioError.add(new JLabel(error.getMessage(),SwingConstants.CENTER));
+                    ioError.show();
+                }
+            }
+        });
+        return tmp_loadButton;
+    }
+
 }

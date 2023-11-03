@@ -1,6 +1,14 @@
 class Main{
+    public static Application app;
     public static void main(String[] args) {
-        new Application();
+        createApp();
+    }
+
+    public static void createApp(){
+        app=new Application();
+    }
+    public static void deleteApp(){
+        app.dispose();
     }
 
  }
