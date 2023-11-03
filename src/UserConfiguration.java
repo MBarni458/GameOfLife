@@ -58,6 +58,7 @@ public class UserConfiguration implements Serializable {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(inputfile)));
         bufferedReader.readLine();
         String data[]= bufferedReader.readLine().split(";");
+        bufferedReader.close();
         setId(Integer.parseInt(data[0]));
         setTileShape(ShapeConverter.tileShapeSelector(data[1]));
         setRowsOfTheMap(Integer.parseInt(data[2]));
@@ -66,7 +67,6 @@ public class UserConfiguration implements Serializable {
         setOptimalPopulation(Integer.parseInt(data[5]));
         setUnderPopulation(Integer.parseInt(data[6]));
         setOverPopulation(Integer.parseInt(data[7]));
-
     }
 
 }

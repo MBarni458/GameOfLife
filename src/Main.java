@@ -1,5 +1,5 @@
 class Main{
-    public static Application app;
+    private static Application app;
     public static void main(String[] args) {
         createApp();
     }

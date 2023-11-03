@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Simulation extends SwingWorker<Void, Void> {
 
@@ -7,8 +8,8 @@ public class Simulation extends SwingWorker<Void, Void> {
     MapBuilder map;
     boolean active;
 
-    public Simulation(ArrayList<Shape> cells, MapBuilder map) {
-        this.cells = cells;
+    public Simulation(List<Shape> cells, MapBuilder map) {
+        this.cells = (ArrayList<Shape>) cells;
         this.map=map;
         this.active=true;
     }
@@ -46,7 +47,7 @@ public class Simulation extends SwingWorker<Void, Void> {
         }
     }
     @Override
-    protected Void doInBackground() {
+    protected Void doInBackground() throws InterruptedException {
         synchronized (cells) {
             while (active) {
                 if (UserConfiguration.activeSimulation) {
@@ -57,11 +58,7 @@ public class Simulation extends SwingWorker<Void, Void> {
                     setCellsFinalStatus();
                     map.repaint();
                 }
-                try {
                     cells.wait(UserConfiguration.speedOfSimulation);
-                } catch (InterruptedException e) {
-                    System.out.println(e.getMessage());
-                }
             }
         }
         return null;
