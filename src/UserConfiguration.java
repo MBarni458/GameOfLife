@@ -12,7 +12,6 @@ public class UserConfiguration implements Serializable {
     public static int underPopulation=1;
     public static int overPopulation=4;
     public static int optimalPopulation =3;
-    public static int lifetimeOfACell=1;
     public static int lifeTime=0;
     public static int speedOfSimulation =500;
     public static boolean activeSimulation = false;
@@ -39,7 +38,7 @@ public class UserConfiguration implements Serializable {
         optimalPopulation=newOptimalPopulation;
     }
     public static void setLifetimeOfACell(int newLifeTimeOfACell){
-        lifetimeOfACell=newLifeTimeOfACell;
+        lifeTime=newLifeTimeOfACell;
     }
     public static void setSpeedOfSimulation(int newSpeedOfSimulation){
         speedOfSimulation=newSpeedOfSimulation;
