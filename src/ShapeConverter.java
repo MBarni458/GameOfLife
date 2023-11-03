@@ -65,7 +65,17 @@ public class ShapeConverter {
             case SQUARE -> Square.sortTilesByY(container);
             case HEXAGON -> Hexagon.sortTileByX(container);
         }
+    }
 
+    public static UserConfiguration.TileShape tileShapeSelector(String shapeName){
+        if (shapeName.equals(UserConfiguration.TileShape.HEXAGON.toString())){
+            return UserConfiguration.TileShape.HEXAGON;
+        } else {
+            if (shapeName.equals(UserConfiguration.TileShape.SQUARE.toString())){
+                return UserConfiguration.TileShape.SQUARE;
+            }
+        }
+        return null;
     }
 
 }

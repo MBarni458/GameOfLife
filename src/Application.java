@@ -2,11 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import static javax.swing.JFrame.*;
 
-public class Application{
+public class Application extends JFrame{
     public ArrayList<Shape> container = new ArrayList<>();
     public MapBuilder map;
     public UserSettingsMenu userMenu;
@@ -40,15 +42,16 @@ public class Application{
         }
     };
 
+
     public Application(){
 
-        frame = new JFrame("Game Of Life");
-        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        frame.setSize(1000,550);
-        frame.setLocationRelativeTo(null);
+        this.setTitle("Game Of Life");
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setSize(1000,700);
+        this.setLocationRelativeTo(null);
 
         map= new MapBuilder(container,userInput);
-        frame.add(map);
+        this.add(map);
 
         simulation =new Simulation(container,map);
         simulation.execute();
@@ -59,10 +62,9 @@ public class Application{
         splitPane.setOneTouchExpandable(false);
         splitPane.setDividerLocation(750);
 
-        frame.add(splitPane);
+        this.add(splitPane);
 
-        frame.setVisible(true);
-
+        this.setVisible(true);
     }
 
     public void findClickedShape(Point click){

@@ -1,10 +1,11 @@
-import java.io.Serializable;
+import java.io.*;
 
 public class UserConfiguration implements Serializable {
     enum TileShape{
         SQUARE,
         HEXAGON
     }
+    private static int id=1;
     public static TileShape tileShape = TileShape.SQUARE;
     public static int rowsOfTheMap=20;
     public static int columnsOfTheMap=20;
@@ -15,6 +16,9 @@ public class UserConfiguration implements Serializable {
     public static int speedOfSimulation =500;
     public static boolean activeSimulation = false;
 
+    public static void setId(int newId){
+        id=newId;
+    }
     public static void setTileShape(TileShape newTileShape) {
         tileShape=newTileShape;
     }
@@ -42,4 +46,27 @@ public class UserConfiguration implements Serializable {
     public static void setActiveSimulation(boolean newActiveSimulation){
         activeSimulation=newActiveSimulation;
     }
+    public static void saveConfiguration(File outputfile) throws IOException{
+        BufferedWriter bufferedWriter =new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputfile)));
+        bufferedWriter.write("id;TileShape;rowsNumber;colsNumber;simulationSpeed;optimalPopulation;underPopulation;overPopulation");
+        bufferedWriter.newLine();
+        bufferedWriter.write(id+";"+tileShape.toString()+";"+rowsOfTheMap+";"+columnsOfTheMap+";"+speedOfSimulation+";"+optimalPopulation+";"+underPopulation+";"+overPopulation);
+        bufferedWriter.close();
+    }
+
+    public static void loadConfiguration(File inputfile) throws IOException{
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(inputfile)));
+        bufferedReader.readLine();
+        String data[]= bufferedReader.readLine().split(";");
+        setId(Integer.parseInt(data[0]));
+        setTileShape(ShapeConverter.tileShapeSelector(data[1]));
+        setRowsOfTheMap(Integer.parseInt(data[2]));
+        setColumnsOfTheMap(Integer.parseInt(data[3]));
+        setSpeedOfSimulation(Integer.parseInt(data[4]));
+        setOptimalPopulation(Integer.parseInt(data[5]));
+        setUnderPopulation(Integer.parseInt(data[6]));
+        setOverPopulation(Integer.parseInt(data[7]));
+
+    }
+
 }
