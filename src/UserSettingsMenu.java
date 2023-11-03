@@ -5,38 +5,34 @@ import java.io.IOException;
 
 public class UserSettingsMenu extends JPanel {
 
-    private MapBuilder map;
+    private final MapBuilder map;
 
-    private  JButton startButton;
-    private JSlider numberOfRowsSlider;
-    private JSlider numberOfColumnsSlider;
-    private JSlider simulationSpeedSlider;
-    private JSpinner optimalPopulationSpinner;
-    private JSpinner underPopulationSpinner;
-    private JSpinner overPopulationSpinner;
-    private JRadioButton squareRadiobutton;
-    private JRadioButton hexagonRadiobutton;
-    private JButton saveButton;
-    private JButton loadButton;
+    private final JSlider numberOfRowsSlider;
+    private final JSlider numberOfColumnsSlider;
+    private final JSpinner optimalPopulationSpinner;
+    private final JRadioButton squareRadiobutton;
+    private final JRadioButton hexagonRadiobutton;
+
     public UserSettingsMenu(MapBuilder map) {
 
-        super(new GridLayout(20,2));
+        super(new GridLayout(25,1));
 
         this.map=map;
 
         //Create the form elements
-        startButton=createStartButton();
+        JButton startButton = createStartButton();
         numberOfRowsSlider= createNumberOfRowsSlider();
         numberOfColumnsSlider= createNumberOfColumnsSlider();
-        simulationSpeedSlider= createSimulationSpeedSlider();
+        JSlider simulationSpeedSlider = createSimulationSpeedSlider();
         optimalPopulationSpinner= createOptimalPopulationSpinner();
-        underPopulationSpinner= createUnderPopulationSpinner();
-        overPopulationSpinner= createOverPopulationSpinner();
+        JSpinner underPopulationSpinner = createUnderPopulationSpinner();
+        JSpinner overPopulationSpinner = createOverPopulationSpinner();
+        JSpinner lifeTimeSpinner = createLifeTimeSpinner();
         squareRadiobutton= createSquareRadioButton();
         hexagonRadiobutton= createHexagonRadioButton();
         createShapeSelection();
-        saveButton= createSaveButton();
-        loadButton= createLoadButton();
+        JButton saveButton = createSaveButton();
+        JButton loadButton = createLoadButton();
 
         //Add the form elements to the panel
         this.add(startButton);
@@ -45,10 +41,12 @@ public class UserSettingsMenu extends JPanel {
         this.add(simulationSpeedSlider);
         this.add(new JLabel("Optimal Population",SwingConstants.CENTER));
         this.add(optimalPopulationSpinner);
-        this.add(new JLabel("Under Population",SwingConstants.CENTER));
+        this.add(new JLabel("Underpopulation",SwingConstants.CENTER));
         this.add(underPopulationSpinner);
-        this.add(new JLabel("Over Population",SwingConstants.CENTER));
+        this.add(new JLabel("Overpopulation",SwingConstants.CENTER));
         this.add(overPopulationSpinner);
+        this.add(new JLabel("Lifetime",SwingConstants.CENTER));
+        this.add(lifeTimeSpinner);
         this.add(new JLabel("Map Settings",SwingConstants.CENTER));
         this.add(new JLabel("Number of Rows",SwingConstants.CENTER));
         this.add(numberOfRowsSlider);
@@ -147,7 +145,18 @@ public class UserSettingsMenu extends JPanel {
         tmpOverPopulationSpinner.addChangeListener(e -> UserConfiguration.overPopulation=Integer.parseInt(tmpOverPopulationSpinner.getValue().toString()));
         return tmpOverPopulationSpinner;
     }
-
+    private JSpinner createLifeTimeSpinner(){
+        SpinnerModel lifeTimeModel = new SpinnerNumberModel(UserConfiguration.lifeTime, 0, 10, 1);
+        JSpinner tmpLifeTimeSpinner = new JSpinner(lifeTimeModel);
+        tmpLifeTimeSpinner.addChangeListener(e -> {
+            int difference= (int)tmpLifeTimeSpinner.getValue() -UserConfiguration.lifeTime;
+            UserConfiguration.setLifetimeOfACell(Integer.parseInt(tmpLifeTimeSpinner.getValue().toString()));
+            for(Shape element:map.tiles){
+                element.lifeTime+=difference;
+            }
+        });
+        return tmpLifeTimeSpinner;
+    }
     private JRadioButton createSquareRadioButton(){
         JRadioButton tmpSquareRadiobutton = new JRadioButton();
         tmpSquareRadiobutton.setSelected(true);
@@ -169,17 +178,15 @@ public class UserSettingsMenu extends JPanel {
         });
         return tmpHexagonRadiobutton;
     }
-    private ButtonGroup createShapeSelection(){
+    private void createShapeSelection(){
         ButtonGroup tmpShapeSelection = new ButtonGroup();
         tmpShapeSelection.add(squareRadiobutton);
         tmpShapeSelection.add(hexagonRadiobutton);
-        return tmpShapeSelection;
     }
-
     private JButton createSaveButton(){
-        JButton tmp_saveButton= new JButton("Save");
+        JButton tmpSaveButton= new JButton("Save");
         JFileChooser outputChooser= new JFileChooser();
-        tmp_saveButton.addActionListener(e-> {
+        tmpSaveButton.addActionListener(e-> {
             int approvedValue = outputChooser.showSaveDialog(null);
             if (approvedValue==JFileChooser.APPROVE_OPTION){
                 File output= outputChooser.getSelectedFile();
@@ -192,13 +199,12 @@ public class UserSettingsMenu extends JPanel {
                 }
             }
         });
-        return tmp_saveButton;
+        return tmpSaveButton;
     }
-
     private JButton createLoadButton(){
-        JButton tmp_loadButton= new JButton("Load");
+        JButton tmpLoadButton= new JButton("Load");
         JFileChooser inputChooser= new JFileChooser();
-        tmp_loadButton.addActionListener(e-> {
+        tmpLoadButton.addActionListener(e-> {
             int approvedValue = inputChooser.showSaveDialog(null);
             if (approvedValue==JFileChooser.APPROVE_OPTION){
                 File input= inputChooser.getSelectedFile();
@@ -213,7 +219,6 @@ public class UserSettingsMenu extends JPanel {
                 }
             }
         });
-        return tmp_loadButton;
+        return tmpLoadButton;
     }
-
 }

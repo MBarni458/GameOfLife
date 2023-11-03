@@ -3,7 +3,6 @@ class Main{
     public static void main(String[] args) {
         createApp();
     }
-
     public static void createApp(){
         app=new Application();
     }

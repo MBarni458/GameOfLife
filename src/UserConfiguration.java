@@ -12,7 +12,7 @@ public class UserConfiguration implements Serializable {
     public static int underPopulation=1;
     public static int overPopulation=4;
     public static int optimalPopulation =3;
-    public static int lifetimeOfACell=1;
+    public static int lifeTime=0;
     public static int speedOfSimulation =500;
     public static boolean activeSimulation = false;
 
@@ -38,7 +38,7 @@ public class UserConfiguration implements Serializable {
         optimalPopulation=newOptimalPopulation;
     }
     public static void setLifetimeOfACell(int newLifeTimeOfACell){
-        lifetimeOfACell=newLifeTimeOfACell;
+        lifeTime=newLifeTimeOfACell;
     }
     public static void setSpeedOfSimulation(int newSpeedOfSimulation){
         speedOfSimulation=newSpeedOfSimulation;
@@ -48,9 +48,9 @@ public class UserConfiguration implements Serializable {
     }
     public static void saveConfiguration(File outputfile) throws IOException{
         BufferedWriter bufferedWriter =new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputfile)));
-        bufferedWriter.write("id;TileShape;rowsNumber;colsNumber;simulationSpeed;optimalPopulation;underPopulation;overPopulation");
+        bufferedWriter.write("id;TileShape;rowsNumber;colsNumber;simulationSpeed;optimalPopulation;underPopulation;overPopulation,lifeTime");
         bufferedWriter.newLine();
-        bufferedWriter.write(id+";"+tileShape.toString()+";"+rowsOfTheMap+";"+columnsOfTheMap+";"+speedOfSimulation+";"+optimalPopulation+";"+underPopulation+";"+overPopulation);
+        bufferedWriter.write(id+";"+tileShape.toString()+";"+rowsOfTheMap+";"+columnsOfTheMap+";"+speedOfSimulation+";"+optimalPopulation+";"+underPopulation+";"+overPopulation+";"+lifeTime);
         bufferedWriter.close();
     }
 

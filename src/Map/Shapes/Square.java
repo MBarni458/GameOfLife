@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class Square extends Shape {
@@ -13,49 +14,38 @@ public class Square extends Shape {
         xOffset=0;
         radius=30;
         virtualColumnNumber =1;
+        lifeTime=UserConfiguration.lifeTime;
     }
 
-    public static void sortTilesByY(ArrayList<Shape> cells){
+    public static void sortTilesByY(List<Shape> cells){
         cells.sort((s1, s2) -> {
-            if (((Square)s1).center.y < ((Square)s2).center.y){
+            if (s1.center.y < s2.center.y){
                 return -1;
             }
-            if (((Square)s1).center.y > ((Square)s2).center.y){
+            if (s1.center.y > s2.center.y){
                 return 1;
             }
-            if (((Square)s1).center.x < ((Square)s2).center.x){
-                return -1;
-            }
-            if (((Square)s1).center.x > ((Square)s2).center.x){
-                return 1;
-            }
-            return 0;
+            return Integer.compare(s1.center.x, s2.center.x);
         });
     }
 
-    public static void sortTilesByX(ArrayList<Shape> cells){
+    public static void sortTilesByX(List<Shape> cells){
         cells.sort((s1, s2) -> {
-            if (((Square)s1).center.x < ((Square)s2).center.x){
+            if (s1.center.x < s2.center.x){
                 return -1;
             }
-            if (((Square)s1).center.x > ((Square)s2).center.x){
+            if (s1.center.x > s2.center.x){
                 return 1;
             }
-            if (((Square)s1).center.y < ((Square)s2).center.y){
-                return -1;
-            }
-            if (((Square)s1).center.y > ((Square)s2).center.y){
-                return 1;
-            }
-            return 0;
+            return Integer.compare(s1.center.y, s2.center.y);
         });
     }
 
     public void findNeighbours(ArrayList<Shape> container){
         //This function set the neighbours of the shape.
         // The shape is a neighbour of this shape if the distance between the centers is less than the radius
-        this.neighbours=container.stream().filter(square -> ((Square)square).center
-        .distance(this.center) <= radius && !((Square)square).center.equals(this.center))
+        this.neighbours=container.stream().filter(square -> square.center
+        .distance(this.center) <= radius && !square.center.equals(this.center))
         .collect(Collectors.toCollection(ArrayList<Shape>::new));
     }
 
@@ -74,12 +64,12 @@ public class Square extends Shape {
     }
 
     public ArrayList<Shape> cellsInTheSameLine(ArrayList<Shape> container){
-        return container.stream().filter(tile->((Square)tile).center.y==this.center.y)
+        return container.stream().filter(tile-> tile.center.y==this.center.y)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public ArrayList<Shape> cellsInTheSameColumn(ArrayList<Shape> container){
-        return container.stream().filter(tile->((Square)tile).center.x==this.center.x)
+        return container.stream().filter(tile-> tile.center.x==this.center.x)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 

@@ -6,8 +6,8 @@ import javax.swing.JPanel;
 public class MapBuilder extends JPanel{
 
     public ArrayList<Shape> tiles;
-    private int yDefaultOffset;
-    private int xDefaultOffset;
+    private final int yDefaultOffset;
+    private final int xDefaultOffset;
     private int[] xPoints;
     private int[] yPoints;
 
@@ -73,7 +73,7 @@ public class MapBuilder extends JPanel{
                 xPoints=tiles.get(0).shiftXPoints(xPoints,false);
             }
             findNeighbours();
-            tiles.notify();
+            tiles.notifyAll();
         }
     }
     public synchronized void removeLine(){
@@ -84,7 +84,7 @@ public class MapBuilder extends JPanel{
             //Because the shape with largest y coordinates is at the end of the tiles (the ArrayList) the ones with the same y should be removed
             tiles.removeAll(tiles.get(tiles.size()-1).cellsInTheSameLine(tiles));
             findNeighbours();
-            tiles.notify();
+            tiles.notifyAll();
         }
 
         }
@@ -113,7 +113,7 @@ public class MapBuilder extends JPanel{
                 yPoints = Arrays.stream(yPoints).map(y -> y + tiles.get(0).yOffset * tiles.get(0).virtualColumnNumber).toArray();
             }
             findNeighbours();
-            tiles.notify();
+            tiles.notifyAll();
         }
     }
     public synchronized void removeColumn(){
@@ -123,7 +123,7 @@ public class MapBuilder extends JPanel{
                 //Because the tiles are sorted by the x coordinates the last element is at the left side of the map
                 tiles.removeAll(tiles.get(tiles.size() - 1).cellsInTheSameColumn(tiles));
                 findNeighbours();
-                tiles.notify();
+                tiles.notifyAll();
         }
 
     }

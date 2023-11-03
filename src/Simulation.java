@@ -19,20 +19,20 @@ public class Simulation extends SwingWorker<Void, Void> {
 
     protected void setCellsTemporaryStatus(){
         for (Shape cell : cells) {
-            long numberOfLivingNeighbours = cell.neighbours.stream().filter(c -> (c.activePhase == Shape.Phases.ACTIVE) || (c.activePhase == Shape.Phases.DYING)).count();
-            if (numberOfLivingNeighbours == UserConfiguration.optimalPopulation && cell.activePhase!= Shape.Phases.ACTIVE) {
-                cell.activePhase = Shape.Phases.BORN;
-            } else {
-                if (numberOfLivingNeighbours <= UserConfiguration.underPopulation && cell.activePhase!=Shape.Phases.INACTIVE){
-                    cell.activePhase= Shape.Phases.DYING;
+            long numberOfLivingNeighbours = cell.numberOfLivingNeighbours();
+            if (numberOfLivingNeighbours == UserConfiguration.optimalPopulation) {
+                if (cell.activePhase!= Shape.Phases.ACTIVE){
+                    cell.born();
                 } else {
-                    if(numberOfLivingNeighbours >= UserConfiguration.overPopulation && cell.activePhase!=Shape.Phases.INACTIVE){
-                        cell.activePhase= Shape.Phases.DYING;
-                    }
+                    cell.lifeTime=UserConfiguration.lifeTime;
+                }
+            } else {
+                if ((numberOfLivingNeighbours <= UserConfiguration.underPopulation || numberOfLivingNeighbours >= UserConfiguration.overPopulation ) && cell.activePhase!=Shape.Phases.INACTIVE){
+                    cell.dying();
+                }
                 }
             }
         }
-    }
 
     protected void setCellsFinalStatus(){
         for (Shape cell : cells) {
@@ -45,7 +45,6 @@ public class Simulation extends SwingWorker<Void, Void> {
             }
         }
     }
-
     @Override
     protected Void doInBackground() {
         synchronized (cells) {
