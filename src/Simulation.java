@@ -19,15 +19,15 @@ public class Simulation extends SwingWorker<Void, Void> {
 
     protected void setCellsTemporaryStatus(){
         for (Shape cell : cells) {
-            long numberOfLivingNeighbours = cell.neighbours.stream().filter(c -> (c.activePhase == Shape.Phases.ACTIVE) || (c.activePhase == Shape.Phases.DYING)).count();
+            long numberOfLivingNeighbours = cell.numberOfLivingNeighbours();
             if (numberOfLivingNeighbours == UserConfiguration.optimalPopulation && cell.activePhase!= Shape.Phases.ACTIVE) {
-                cell.activePhase = Shape.Phases.BORN;
+                cell.born();
             } else {
                 if (numberOfLivingNeighbours <= UserConfiguration.underPopulation && cell.activePhase!=Shape.Phases.INACTIVE){
-                    cell.activePhase= Shape.Phases.DYING;
+                    cell.dying();
                 } else {
                     if(numberOfLivingNeighbours >= UserConfiguration.overPopulation && cell.activePhase!=Shape.Phases.INACTIVE){
-                        cell.activePhase= Shape.Phases.DYING;
+                        cell.dying();
                     }
                 }
             }
@@ -46,11 +46,13 @@ public class Simulation extends SwingWorker<Void, Void> {
         }
     }
 
+    public int x=0;
     @Override
     protected Void doInBackground() {
         synchronized (cells) {
             while (active) {
                 if (UserConfiguration.activeSimulation) {
+                    System.out.println("Round: "+ (x++));
                     //Before the shapes get their final status they got a temporary one
                     //It is because the final status would change the number of neighbours
                     setCellsTemporaryStatus();

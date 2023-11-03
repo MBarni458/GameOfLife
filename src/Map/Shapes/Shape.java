@@ -15,6 +15,7 @@ public abstract  class Shape extends JPanel {
         //The Dying is a temporary phase. It is before the Shape becomes Inactive
         DYING
     }
+    int lifeTime;
     int numberOfNodes;
     //The not square shapes have fewer columns because of the delay between the lines. To solve this problem every shape has the shapePerColumns variable. It tells how many shapes are in a column
     int virtualColumnNumber;
@@ -32,6 +33,20 @@ public abstract  class Shape extends JPanel {
     //Add the xOffset to each number of the xPoints. If the halfShift is true it adds only half of the xOffset
     public abstract int[] shiftXPoints(int[] xPoints,boolean halfShift);
     public abstract  void findNeighbours(ArrayList<Shape> container);
+    public long numberOfLivingNeighbours(){
+        return this.neighbours.stream().filter(c -> (c.activePhase == Shape.Phases.ACTIVE) || (c.activePhase == Shape.Phases.DYING)).count();
+    }
+    public void born(){
+        this.activePhase=Phases.BORN;
+        this.lifeTime=UserConfiguration.lifeTime;
+    }
+    public void dying(){
+        if (this.lifeTime<=0){
+            this.activePhase=Phases.DYING;
+        } else {
+            this.lifeTime--;
+        }
+    }
     //Find the cells with the same center.x
     public abstract  ArrayList<Shape> cellsInTheSameLine(ArrayList<Shape> container);
     //Find the cells with the same center.y

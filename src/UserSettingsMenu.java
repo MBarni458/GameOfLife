@@ -14,13 +14,14 @@ public class UserSettingsMenu extends JPanel {
     private JSpinner optimalPopulationSpinner;
     private JSpinner underPopulationSpinner;
     private JSpinner overPopulationSpinner;
+    private JSpinner lifeTimeSpinner;
     private JRadioButton squareRadiobutton;
     private JRadioButton hexagonRadiobutton;
     private JButton saveButton;
     private JButton loadButton;
     public UserSettingsMenu(MapBuilder map) {
 
-        super(new GridLayout(20,2));
+        super(new GridLayout(25,1));
 
         this.map=map;
 
@@ -32,6 +33,7 @@ public class UserSettingsMenu extends JPanel {
         optimalPopulationSpinner= createOptimalPopulationSpinner();
         underPopulationSpinner= createUnderPopulationSpinner();
         overPopulationSpinner= createOverPopulationSpinner();
+        lifeTimeSpinner= createLifeTimeSpinner();
         squareRadiobutton= createSquareRadioButton();
         hexagonRadiobutton= createHexagonRadioButton();
         createShapeSelection();
@@ -45,10 +47,12 @@ public class UserSettingsMenu extends JPanel {
         this.add(simulationSpeedSlider);
         this.add(new JLabel("Optimal Population",SwingConstants.CENTER));
         this.add(optimalPopulationSpinner);
-        this.add(new JLabel("Under Population",SwingConstants.CENTER));
+        this.add(new JLabel("Underpopulation",SwingConstants.CENTER));
         this.add(underPopulationSpinner);
-        this.add(new JLabel("Over Population",SwingConstants.CENTER));
+        this.add(new JLabel("Overpopulation",SwingConstants.CENTER));
         this.add(overPopulationSpinner);
+        this.add(new JLabel("Lifetime",SwingConstants.CENTER));
+        this.add(lifeTimeSpinner);
         this.add(new JLabel("Map Settings",SwingConstants.CENTER));
         this.add(new JLabel("Number of Rows",SwingConstants.CENTER));
         this.add(numberOfRowsSlider);
@@ -147,7 +151,18 @@ public class UserSettingsMenu extends JPanel {
         tmpOverPopulationSpinner.addChangeListener(e -> UserConfiguration.overPopulation=Integer.parseInt(tmpOverPopulationSpinner.getValue().toString()));
         return tmpOverPopulationSpinner;
     }
-
+    private JSpinner createLifeTimeSpinner(){
+        SpinnerModel lifeTimeModel = new SpinnerNumberModel(UserConfiguration.lifeTime, 0, 10, 1);
+        JSpinner tmpLifeTimeSpinner = new JSpinner(lifeTimeModel);
+        tmpLifeTimeSpinner.addChangeListener(e -> {
+            UserConfiguration.setLifetimeOfACell(Integer.parseInt(tmpLifeTimeSpinner.getValue().toString()));
+            int difference= (int)tmpLifeTimeSpinner.getValue() -UserConfiguration.lifeTime;
+            for(Shape element:map.tiles){
+                element.lifeTime+=difference;
+            }
+        });
+        return tmpLifeTimeSpinner;
+    }
     private JRadioButton createSquareRadioButton(){
         JRadioButton tmpSquareRadiobutton = new JRadioButton();
         tmpSquareRadiobutton.setSelected(true);
@@ -175,7 +190,6 @@ public class UserSettingsMenu extends JPanel {
         tmpShapeSelection.add(hexagonRadiobutton);
         return tmpShapeSelection;
     }
-
     private JButton createSaveButton(){
         JButton tmp_saveButton= new JButton("Save");
         JFileChooser outputChooser= new JFileChooser();
@@ -194,7 +208,6 @@ public class UserSettingsMenu extends JPanel {
         });
         return tmp_saveButton;
     }
-
     private JButton createLoadButton(){
         JButton tmp_loadButton= new JButton("Load");
         JFileChooser inputChooser= new JFileChooser();
@@ -215,5 +228,4 @@ public class UserSettingsMenu extends JPanel {
         });
         return tmp_loadButton;
     }
-
 }

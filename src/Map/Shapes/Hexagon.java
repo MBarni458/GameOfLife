@@ -12,7 +12,7 @@ public class Hexagon extends Shape {
         yOffset =16;
         xOffset=18;
         radius=20;
-
+        lifeTime=UserConfiguration.lifeTime;
         //The hexagon has a unique kind of columns. It has two real columns next to each other
         virtualColumnNumber =2;
     }
@@ -70,7 +70,6 @@ public class Hexagon extends Shape {
         int[] ret =  {10, 5, -5, -10, -5, 5};
         return Arrays.stream(ret).map(y->y+yOffset).toArray();
     }
-
     public int[] shiftXPoints(int[] xPoints,boolean halfShift){
         return Arrays.stream(xPoints).map(x->(x+(halfShift?xOffset/2:xOffset))).toArray();
     }

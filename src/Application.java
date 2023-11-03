@@ -44,7 +44,6 @@ public class Application extends JFrame{
 
 
     public Application(){
-
         this.setTitle("Game Of Life");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setSize(1000,700);

@@ -13,6 +13,7 @@ public class Square extends Shape {
         xOffset=0;
         radius=30;
         virtualColumnNumber =1;
+        lifeTime=UserConfiguration.lifeTime;
     }
 
     public static void sortTilesByY(ArrayList<Shape> cells){
