@@ -13,8 +13,9 @@ public class Square extends Shape {
         yOffset =20;
         xOffset=0;
         radius=30;
-        virtualColumnNumber =1;
         lifeTime=UserConfiguration.lifeTime;
+        color=UserConfiguration.defaultColor;
+        virtualColumnNumber =1;
     }
 
     public static void sortTilesByY(List<Shape> cells){

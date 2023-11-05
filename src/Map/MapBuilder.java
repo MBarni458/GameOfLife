@@ -132,7 +132,7 @@ public class MapBuilder extends JPanel{
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         for(Shape element: tiles){
-            g.setColor((element.activePhase==Shape.Phases.INACTIVE)?Color.white:Color.red);
+            g.setColor((element.activePhase==Shape.Phases.INACTIVE)?Color.white:element.color);
             g.fillPolygon(element.shape);
             g.setColor(Color.black);
             g.drawPolygon(element.shape);

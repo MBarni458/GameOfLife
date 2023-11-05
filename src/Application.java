@@ -62,6 +62,8 @@ public class Application extends JFrame{
                 if (ShapeConverter.isClicked(click,element)){
                     if (element.activePhase == Shape.Phases.INACTIVE){
                         element.activePhase = Shape.Phases.ACTIVE;
+                        element.lifeTime=UserConfiguration.lifeTime;
+                        element.resetColor();
                     }
                     else{
                         element.activePhase= Shape.Phases.INACTIVE;

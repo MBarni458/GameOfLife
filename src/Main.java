@@ -9,5 +9,4 @@ class Main{
     public static void deleteApp(){
         app.dispose();
     }
-
  }
