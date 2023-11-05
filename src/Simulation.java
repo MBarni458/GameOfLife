@@ -26,6 +26,7 @@ public class Simulation extends SwingWorker<Void, Void> {
                     cell.born();
                 } else {
                     cell.lifeTime=UserConfiguration.lifeTime;
+                    cell.resetColor();
                 }
             } else {
                 if ((numberOfLivingNeighbours <= UserConfiguration.underPopulation || numberOfLivingNeighbours >= UserConfiguration.overPopulation ) && cell.activePhase!=Shape.Phases.INACTIVE){

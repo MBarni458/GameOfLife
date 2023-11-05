@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.io.*;
 
 public class UserConfiguration implements Serializable {
@@ -14,6 +15,7 @@ public class UserConfiguration implements Serializable {
     public static int optimalPopulation =3;
     public static int lifeTime=0;
     public static int speedOfSimulation =500;
+    public static Color defaultColor= Color.BLUE;
     public static boolean activeSimulation = false;
 
     public static void setId(int newId){
@@ -42,6 +44,9 @@ public class UserConfiguration implements Serializable {
     }
     public static void setSpeedOfSimulation(int newSpeedOfSimulation){
         speedOfSimulation=newSpeedOfSimulation;
+    }
+    public static void setDefaultColor(Color newColor){
+        defaultColor=newColor;
     }
     public static void setActiveSimulation(boolean newActiveSimulation){
         activeSimulation=newActiveSimulation;

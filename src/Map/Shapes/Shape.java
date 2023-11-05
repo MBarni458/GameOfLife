@@ -29,6 +29,7 @@ public abstract  class Shape extends JPanel {
     int radius;
    int xOffset;
    int yOffset;
+   Color color;
     ArrayList<Shape> neighbours;
     //Add the xOffset to each number of the xPoints. If the halfShift is true it adds only half of the xOffset
     public abstract int[] shiftXPoints(int[] xPoints,boolean halfShift);
@@ -39,8 +40,10 @@ public abstract  class Shape extends JPanel {
     public void born(){
         this.activePhase=Phases.BORN;
         this.lifeTime=UserConfiguration.lifeTime;
+        resetColor();
     }
     public void dying(){
+        fadeColor();
         if (this.lifeTime<=0){
             this.activePhase=Phases.DYING;
         } else {
@@ -51,4 +54,19 @@ public abstract  class Shape extends JPanel {
     public abstract  ArrayList<Shape> cellsInTheSameLine(ArrayList<Shape> container);
     //Find the cells with the same center.y
     public abstract  ArrayList<Shape> cellsInTheSameColumn(ArrayList<Shape> container);
+
+    public void fadeColor(){
+        if (lifeTime>=0){
+        int red= this.color.getRed()+255/(UserConfiguration.lifeTime+1);
+        int green= this.color.getGreen()+255/(UserConfiguration.lifeTime+1);
+        int blue= this.color.getBlue()+255/(UserConfiguration.lifeTime+1);
+        this.color= new Color(Math.min(250,red),Math.min(250,green),Math.min(250,blue));
+        } else {
+            this.color= Color.WHITE;
+        }
+    }
+
+    public void resetColor(){
+        this.color=UserConfiguration.defaultColor;
+    }
 }

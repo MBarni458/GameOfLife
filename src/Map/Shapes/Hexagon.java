@@ -14,6 +14,7 @@ public class Hexagon extends Shape {
         xOffset=18;
         radius=20;
         lifeTime=UserConfiguration.lifeTime;
+        color=UserConfiguration.defaultColor;
         //The hexagon has a unique kind of columns. It has two real columns next to each other
         virtualColumnNumber =2;
     }
