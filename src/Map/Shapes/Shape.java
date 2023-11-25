@@ -36,7 +36,11 @@ public abstract  class Shape implements Serializable {
     public abstract int[] shiftXPoints(int[] xPoints,boolean halfShift);
     public abstract  void findNeighbours(ArrayList<Shape> container);
     public long numberOfLivingNeighbours(){
-        return this.neighbours.stream().filter(c -> (c.activePhase == Shape.Phases.ACTIVE) || (c.activePhase == Shape.Phases.DYING)).count();
+        try {
+            return this.neighbours.stream().filter(c -> (c.activePhase == Shape.Phases.ACTIVE) || (c.activePhase == Shape.Phases.DYING)).count();
+        } catch (NullPointerException e){
+            return 0;
+        }
     }
     public void born(){
         this.activePhase=Phases.BORN;
@@ -57,41 +61,35 @@ public abstract  class Shape implements Serializable {
     public abstract  ArrayList<Shape> cellsInTheSameColumn(ArrayList<Shape> container);
 
     public void fadeColor(){
-        if (lifeTime>=0){
-        int red= this.color.getRed()+255/(UserConfiguration.lifeTime+1);
-        int green= this.color.getGreen()+255/(UserConfiguration.lifeTime+1);
-        int blue= this.color.getBlue()+255/(UserConfiguration.lifeTime+1);
-        this.color= new Color(Math.min(250,red),Math.min(250,green),Math.min(250,blue));
-        } else {
-            this.color= Color.WHITE;
-        }
+        int red = this.color.getRed() + 255 / (UserConfiguration.lifeTime + 1);
+        int green = this.color.getGreen() + 255 / (UserConfiguration.lifeTime + 1);
+        int blue = this.color.getBlue() + 255 / (UserConfiguration.lifeTime + 1);
+        this.color = new Color(Math.min(250, red), Math.min(250, green), Math.min(250, blue));
     }
 
     public void resetColor(){
         this.color=UserConfiguration.defaultColor;
     }
 
-    public static void saveFigure(ArrayList<Shape> shapes, File outputFile){
+    public static void saveFigure(ArrayList<Shape> shapes, File outputFile) throws NullPointerException{
         try {
             ObjectOutputStream objectOutputStream= new ObjectOutputStream(new FileOutputStream(outputFile));
 
             for (Shape element: shapes){
                 element.neighbours=null;
             }
-
             objectOutputStream.writeObject(shapes);
         } catch (IOException e){
             System.out.println("Unexpected IO error: "+e.getMessage());
         }
     }
-
     public static ArrayList<Shape> loadFigure(File inputFile){
         try {
             ObjectInputStream objectInputStream= new ObjectInputStream(new FileInputStream(inputFile));
             return (ArrayList<Shape>) objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e){
             System.out.println("Unexpected IO error: "+e.getMessage());
+            return new ArrayList<>();
         }
-        return new ArrayList<>();
     }
 }

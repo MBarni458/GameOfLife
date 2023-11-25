@@ -30,18 +30,6 @@ public class Square extends Shape {
         });
     }
 
-    public static void sortTilesByX(List<Shape> cells){
-        cells.sort((s1, s2) -> {
-            if (s1.center.x < s2.center.x){
-                return -1;
-            }
-            if (s1.center.x > s2.center.x){
-                return 1;
-            }
-            return Integer.compare(s1.center.y, s2.center.y);
-        });
-    }
-
     public void findNeighbours(ArrayList<Shape> container){
         //This function set the neighbours of the shape.
         // The shape is a neighbour of this shape if the distance between the centers is less than the radius
@@ -49,7 +37,6 @@ public class Square extends Shape {
         .distance(this.center) <= radius && !square.center.equals(this.center))
         .collect(Collectors.toCollection(ArrayList<Shape>::new));
     }
-
     public static int[] defaultXPositions(int xOffset){
         int[] ret =  {-10,-10,10,10};
         return Arrays.stream(ret).map(x->x+xOffset).toArray();
@@ -59,7 +46,6 @@ public class Square extends Shape {
         int[] ret =  {10, -10, -10, 10};
         return Arrays.stream(ret).map(y->y+yOffset).toArray();
     }
-
     public int[] shiftXPoints(int[] xPoints, boolean halfShift){
         return Arrays.stream(xPoints).map(x->(x+20)).toArray();
     }
@@ -73,5 +59,4 @@ public class Square extends Shape {
         return container.stream().filter(tile-> tile.center.x==this.center.x)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
-
 }
