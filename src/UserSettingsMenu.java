@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class UserSettingsMenu extends JPanel {
 
@@ -15,7 +16,7 @@ public class UserSettingsMenu extends JPanel {
 
     public UserSettingsMenu(MapBuilder map) {
 
-        super(new GridLayout(25,1));
+        super(new GridLayout(26,1));
 
         this.map=map;
 
@@ -31,8 +32,10 @@ public class UserSettingsMenu extends JPanel {
         squareRadiobutton= createSquareRadioButton();
         hexagonRadiobutton= createHexagonRadioButton();
         createShapeSelection();
-        JButton saveButton = createSaveButton();
-        JButton loadButton = createLoadButton();
+        JButton saveConfigurationButton = createSaveConfigurationButton();
+        JButton loadConfigurationButton = createLoadConfigurationButton();
+        JButton saveFigureButton= createSaveFigureButton();
+        JButton loadFigureButton= createLoadFigureButton();
 
         //Add the form elements to the panel
         this.add(startButton);
@@ -56,8 +59,11 @@ public class UserSettingsMenu extends JPanel {
         this.add(squareRadiobutton);
         this.add(hexagonRadiobutton);
         this.add(new JLabel("Import/Export configuration",SwingConstants.CENTER));
-        this.add(saveButton);
-        this.add(loadButton);
+        this.add(saveConfigurationButton);
+        this.add(loadConfigurationButton);
+        this.add(new JLabel("Import/Export Figure",SwingConstants.CENTER));
+        this.add(saveFigureButton);
+        this.add(loadFigureButton);
     }
 
     private JButton createStartButton(){
@@ -65,12 +71,16 @@ public class UserSettingsMenu extends JPanel {
         String stopText="Stop";
         JButton  tmpStartButton= new JButton(startText);
         tmpStartButton.addActionListener(e -> {
-            UserConfiguration.setActiveSimulation(!UserConfiguration.activeSimulation);
-            tmpStartButton.setText((tmpStartButton.getText().equals(startText))?stopText:startText);
-            numberOfRowsSlider.setEnabled(!numberOfRowsSlider.isEnabled());
-            numberOfColumnsSlider.setEnabled(!numberOfColumnsSlider.isEnabled());
-            squareRadiobutton.setEnabled(!squareRadiobutton.isEnabled());
-            hexagonRadiobutton.setEnabled(!hexagonRadiobutton.isEnabled());
+            try {
+                UserConfiguration.setActiveSimulation(!UserConfiguration.activeSimulation);
+                tmpStartButton.setText((tmpStartButton.getText().equals(startText)) ? stopText : startText);
+                numberOfRowsSlider.setEnabled(!numberOfRowsSlider.isEnabled());
+                numberOfColumnsSlider.setEnabled(!numberOfColumnsSlider.isEnabled());
+                squareRadiobutton.setEnabled(!squareRadiobutton.isEnabled());
+                hexagonRadiobutton.setEnabled(!hexagonRadiobutton.isEnabled());
+            } catch(Exception error){
+                System.out.println("The simulation failed");
+            }
         });
         return tmpStartButton;
     }
@@ -163,6 +173,7 @@ public class UserSettingsMenu extends JPanel {
         tmpSquareRadiobutton.setText("Square");
         tmpSquareRadiobutton.addActionListener(e -> {
             UserConfiguration.setTileShape(UserConfiguration.TileShape.SQUARE);
+            map.setShapeChanged();
             map.createMap();
             map.repaint();
         });
@@ -173,6 +184,7 @@ public class UserSettingsMenu extends JPanel {
         tmpHexagonRadiobutton.setText("Hexagon");
         tmpHexagonRadiobutton.addActionListener(e -> {
             UserConfiguration.setTileShape(UserConfiguration.TileShape.HEXAGON);
+            map.setShapeChanged();
             map.createMap();
             map.repaint();
         });
@@ -183,8 +195,8 @@ public class UserSettingsMenu extends JPanel {
         tmpShapeSelection.add(squareRadiobutton);
         tmpShapeSelection.add(hexagonRadiobutton);
     }
-    private JButton createSaveButton(){
-        JButton tmpSaveButton= new JButton("Save");
+    private JButton createSaveConfigurationButton(){
+        JButton tmpSaveButton= new JButton("Save Configuration");
         JFileChooser outputChooser= new JFileChooser();
         tmpSaveButton.addActionListener(e-> {
             int approvedValue = outputChooser.showSaveDialog(null);
@@ -201,8 +213,8 @@ public class UserSettingsMenu extends JPanel {
         });
         return tmpSaveButton;
     }
-    private JButton createLoadButton(){
-        JButton tmpLoadButton= new JButton("Load");
+    private JButton createLoadConfigurationButton(){
+        JButton tmpLoadButton= new JButton("Load Configuration");
         JFileChooser inputChooser= new JFileChooser();
         tmpLoadButton.addActionListener(e-> {
             int approvedValue = inputChooser.showSaveDialog(null);
@@ -211,12 +223,37 @@ public class UserSettingsMenu extends JPanel {
                 try {
                     UserConfiguration.loadConfiguration(input);
                     Main.deleteApp();
-                    Main.createApp();
+                    Main.createApp(new ArrayList<>());
                 } catch (IOException error){
                     JDialog ioError = new JDialog();
                     ioError.add(new JLabel(error.getMessage(),SwingConstants.CENTER));
                     ioError.show();
                 }
+            }
+        });
+        return tmpLoadButton;
+    }
+    private JButton createSaveFigureButton(){
+        JButton tmpSaveButton= new JButton("Save Figure");
+        JFileChooser outputChooser= new JFileChooser();
+        tmpSaveButton.addActionListener(e-> {
+            int approvedValue = outputChooser.showSaveDialog(null);
+            if (approvedValue==JFileChooser.APPROVE_OPTION){
+                File output= outputChooser.getSelectedFile();
+                Shape.saveFigure(map.tiles, output);
+            }
+        });
+        return tmpSaveButton;
+    }
+    private JButton createLoadFigureButton(){
+        JButton tmpLoadButton= new JButton("Load Figure");
+        JFileChooser inputChooser= new JFileChooser();
+        tmpLoadButton.addActionListener(e-> {
+            int approvedValue = inputChooser.showSaveDialog(null);
+            if (approvedValue==JFileChooser.APPROVE_OPTION){
+                File input= inputChooser.getSelectedFile();
+                Main.deleteApp();
+                Main.createApp(Shape.loadFigure(input));
             }
         });
         return tmpLoadButton;

@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 import javax.swing.JPanel;
 public class MapBuilder extends JPanel{
 
@@ -10,6 +11,12 @@ public class MapBuilder extends JPanel{
     private final int xDefaultOffset;
     private int[] xPoints;
     private int[] yPoints;
+
+    private boolean shapeChanged=false;
+
+    public void setShapeChanged() {
+        this.shapeChanged = true;
+    }
 
     public MapBuilder(ArrayList<Shape> tiles, MouseListener mouseEvent){
         this.tiles=tiles;
@@ -23,16 +30,24 @@ public class MapBuilder extends JPanel{
     }
 
     public void createMap(){
-        tiles.clear();
-
-        xPoints=ShapeConverter.defaultXPositions(xDefaultOffset);
-        yPoints=ShapeConverter.defaultYPositions(yDefaultOffset);
-
-        drawMap();
+        if (tiles.size()==0 || shapeChanged) {
+            Shape.Phases[] actives = new Shape.Phases[tiles.size()];
+            for(int i=0;i<tiles.size();i++){
+                actives[i]=tiles.get(i).activePhase;
+            }
+            tiles.clear();
+            xPoints=ShapeConverter.defaultXPositions(xDefaultOffset);
+            yPoints=ShapeConverter.defaultYPositions(yDefaultOffset);
+            fillTileContainer();
+            for (int i=0;i<actives.length;i++){
+                tiles.get(i).activePhase=actives[i];
+            }
+            shapeChanged=false;
+        }
         findNeighbours();
     }
 
-    public void drawMap(){
+    public void fillTileContainer(){
         int shapeCounter=0;
         int lineCounter=0;
         int countOfAllShapes=UserConfiguration.rowsOfTheMap *UserConfiguration.columnsOfTheMap;

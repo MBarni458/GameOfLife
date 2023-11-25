@@ -1,8 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
 import java.util.ArrayList;
 
-public abstract  class Shape extends JPanel {
+public abstract  class Shape implements Serializable {
 
     //Each Shape has 4 phases
     enum Phases{
@@ -68,5 +69,29 @@ public abstract  class Shape extends JPanel {
 
     public void resetColor(){
         this.color=UserConfiguration.defaultColor;
+    }
+
+    public static void saveFigure(ArrayList<Shape> shapes, File outputFile){
+        try {
+            ObjectOutputStream objectOutputStream= new ObjectOutputStream(new FileOutputStream(outputFile));
+
+            for (Shape element: shapes){
+                element.neighbours=null;
+            }
+
+            objectOutputStream.writeObject(shapes);
+        } catch (IOException e){
+            System.out.println("Unexpected IO error: "+e.getMessage());
+        }
+    }
+
+    public static ArrayList<Shape> loadFigure(File inputFile){
+        try {
+            ObjectInputStream objectInputStream= new ObjectInputStream(new FileInputStream(inputFile));
+            return (ArrayList<Shape>) objectInputStream.readObject();
+        } catch (IOException | ClassNotFoundException e){
+            System.out.println("Unexpected IO error: "+e.getMessage());
+        }
+        return new ArrayList<>();
     }
 }

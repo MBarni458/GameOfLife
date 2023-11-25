@@ -47,10 +47,11 @@ public class ShapeConverter {
     }
 
     public static boolean isClicked(Point click, Shape shape){
-        return switch (UserConfiguration.tileShape) {
-            case SQUARE -> click.distance(((Square) shape).center) <= 9;
-            case HEXAGON -> click.distance(((Hexagon) shape).center) <= 9;
-        };
+            return switch (UserConfiguration.tileShape) {
+                case SQUARE -> click.distance(((Square) shape).center) <= 9;
+                case HEXAGON -> click.distance(((Hexagon) shape).center) <= 9;
+            };
+
     }
 
     public static void sortTilesByY(ArrayList<Shape> container){
@@ -77,5 +78,4 @@ public class ShapeConverter {
         }
         return null;
     }
-
 }
