@@ -14,11 +14,16 @@ public class UserSettingsMenu extends JPanel {
     private final JRadioButton squareRadiobutton;
     private final JRadioButton hexagonRadiobutton;
 
-    public UserSettingsMenu(MapBuilder map) {
+    private boolean mapSettingEnabled;
+
+    public UserSettingsMenu(MapBuilder map, boolean mapSettingEnabled) {
 
         super(new GridLayout(26,1));
 
+        System.out.println(mapSettingEnabled);
+
         this.map=map;
+        this.mapSettingEnabled=mapSettingEnabled;
 
         //Create the form elements
         JButton startButton = createStartButton();
@@ -105,6 +110,7 @@ public class UserSettingsMenu extends JPanel {
             }
             this.map.repaint();
         });
+        tmpNumberOfRowsSlider.setEnabled(mapSettingEnabled);
         return tmpNumberOfRowsSlider;
     }
     private JSlider createNumberOfColumnsSlider(){
@@ -128,6 +134,7 @@ public class UserSettingsMenu extends JPanel {
             }
             this.map.repaint();
         });
+        tmpNumberOfColumnsSlider.setEnabled(mapSettingEnabled);
         return tmpNumberOfColumnsSlider;
     }
     private static JSlider createSimulationSpeedSlider(){

@@ -13,6 +13,8 @@ public class Application extends JFrame{
         this.setSize(1000,700);
         this.setLocationRelativeTo(null);
 
+        boolean enableMapSetting = defaultList.size()==0;
+
         container=defaultList;
 
         MouseListener userInput = new MouseListener() {
@@ -48,7 +50,7 @@ public class Application extends JFrame{
         Simulation simulation = new Simulation(container, map);
         simulation.execute();
 
-        UserSettingsMenu userMenu = new UserSettingsMenu(map);
+        UserSettingsMenu userMenu = new UserSettingsMenu(map,enableMapSetting);
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, map, userMenu);
         splitPane.setOneTouchExpandable(false);
