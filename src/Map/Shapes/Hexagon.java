@@ -18,7 +18,6 @@ public class Hexagon extends Shape {
         //The hexagon has a unique kind of columns. It has two real columns next to each other
         virtualColumnNumber =2;
     }
-
     public static void sortTilesByY(List<Shape> cells){
         cells.sort((s1, s2) -> {
             if (s1.center.y < s2.center.y){
@@ -30,7 +29,6 @@ public class Hexagon extends Shape {
             return Integer.compare(s1.center.x, s2.center.x);
         });
     }
-
     public static void sortTileByX(List<Shape> cells){
         cells.sort((s1, s2) -> {
             if (s1.center.x < s2.center.x){
@@ -42,7 +40,6 @@ public class Hexagon extends Shape {
             return Integer.compare(s1.center.y, s2.center.y);
         });
     }
-
     public void findNeighbours(ArrayList<Shape> container){
         //This function set the neighbours of the shape.
         // The shape is a neighbour of this shape if the distance between the centers is less than the radius
@@ -55,7 +52,6 @@ public class Hexagon extends Shape {
         int[] ret =  {0, 9, 9, 0, -9, -9};
         return Arrays.stream(ret).map(x->x+xOffset).toArray();
     }
-
     public static int[] defaultYPositions(int yOffset){
         int[] ret =  {10, 5, -5, -10, -5, 5};
         return Arrays.stream(ret).map(y->y+yOffset).toArray();
@@ -67,7 +63,6 @@ public class Hexagon extends Shape {
         return container.stream().filter(tile-> tile.center.y==this.center.y)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
-
     public ArrayList<Shape> cellsInTheSameColumn(ArrayList<Shape> container){
         return container.stream().filter(tile-> tile.center.x==this.center.x)
                 .collect(Collectors.toCollection(ArrayList::new));

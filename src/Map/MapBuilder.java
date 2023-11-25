@@ -11,7 +11,6 @@ public class MapBuilder extends JPanel{
     private final int xDefaultOffset;
     private int[] xPoints;
     private int[] yPoints;
-
     private boolean shapeChanged=false;
 
     public void setShapeChanged() {

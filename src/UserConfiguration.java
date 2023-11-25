@@ -11,7 +11,6 @@ public class UserConfiguration implements Serializable {
         SQUARE,
         HEXAGON
     }
-    private static int id=1;
     public static TileShape tileShape = TileShape.SQUARE;
     public static int rowsOfTheMap=20;
     public static int columnsOfTheMap=20;
@@ -23,9 +22,6 @@ public class UserConfiguration implements Serializable {
     public static Color defaultColor= Color.BLUE;
     public static boolean activeSimulation = false;
 
-    public static void setId(int newId){
-        id=newId;
-    }
     public static void setTileShape(TileShape newTileShape) {
         tileShape=newTileShape;
     }
@@ -50,17 +46,14 @@ public class UserConfiguration implements Serializable {
     public static void setSpeedOfSimulation(int newSpeedOfSimulation){
         speedOfSimulation=newSpeedOfSimulation;
     }
-    public static void setDefaultColor(Color newColor){
-        defaultColor=newColor;
-    }
     public static void setActiveSimulation(boolean newActiveSimulation){
         activeSimulation=newActiveSimulation;
     }
     public static void saveConfiguration(File outputfile) throws IOException{
         BufferedWriter bufferedWriter =new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputfile)));
-        bufferedWriter.write("id;TileShape;rowsNumber;colsNumber;simulationSpeed;optimalPopulation;underPopulation;overPopulation,lifeTime");
+        bufferedWriter.write("TileShape;rowsNumber;colsNumber;simulationSpeed;optimalPopulation;underPopulation;overPopulation,lifeTime");
         bufferedWriter.newLine();
-        bufferedWriter.write(id+";"+tileShape.toString()+";"+rowsOfTheMap+";"+columnsOfTheMap+";"+speedOfSimulation+";"+optimalPopulation+";"+underPopulation+";"+overPopulation+";"+lifeTime);
+        bufferedWriter.write(tileShape.toString()+";"+rowsOfTheMap+";"+columnsOfTheMap+";"+speedOfSimulation+";"+optimalPopulation+";"+underPopulation+";"+overPopulation+";"+lifeTime);
         bufferedWriter.close();
     }
     public static void loadConfiguration(File inputfile) throws IOException{
@@ -68,16 +61,12 @@ public class UserConfiguration implements Serializable {
         bufferedReader.readLine();
         String data[]= bufferedReader.readLine().split(";");
         bufferedReader.close();
-        setId(Integer.parseInt(data[0]));
-        setTileShape(ShapeConverter.tileShapeSelector(data[1]));
-        setRowsOfTheMap(Integer.parseInt(data[2]));
-        setColumnsOfTheMap(Integer.parseInt(data[3]));
-        setSpeedOfSimulation(Integer.parseInt(data[4]));
-        setOptimalPopulation(Integer.parseInt(data[5]));
-        setUnderPopulation(Integer.parseInt(data[6]));
-        setOverPopulation(Integer.parseInt(data[7]));
+        setTileShape(ShapeConverter.tileShapeSelector(data[0]));
+        setRowsOfTheMap(Integer.parseInt(data[1]));
+        setColumnsOfTheMap(Integer.parseInt(data[2]));
+        setSpeedOfSimulation(Integer.parseInt(data[3]));
+        setOptimalPopulation(Integer.parseInt(data[4]));
+        setUnderPopulation(Integer.parseInt(data[5]));
+        setOverPopulation(Integer.parseInt(data[6]));
     }
-
-
-
 }
