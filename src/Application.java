@@ -4,14 +4,19 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 public class Application extends JFrame{
-    private final ArrayList<Shape> container = new ArrayList<>();
+    private final ArrayList<Shape> container;
     private final MapBuilder map;
 
-    public Application(){
+    public Application(ArrayList defaultList){
         this.setTitle("Game Of Life");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setSize(1000,700);
         this.setLocationRelativeTo(null);
+
+        boolean enableMapSetting = defaultList.size()==0;
+
+        container=defaultList;
+
         MouseListener userInput = new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -45,7 +50,7 @@ public class Application extends JFrame{
         Simulation simulation = new Simulation(container, map);
         simulation.execute();
 
-        UserSettingsMenu userMenu = new UserSettingsMenu(map);
+        UserSettingsMenu userMenu = new UserSettingsMenu(map,enableMapSetting);
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, map, userMenu);
         splitPane.setOneTouchExpandable(false);
@@ -58,20 +63,28 @@ public class Application extends JFrame{
 
     public void findClickedShape(Point click){
         synchronized (container){
-            for (Shape element: container){
-                if (ShapeConverter.isClicked(click,element)){
-                    if (element.activePhase == Shape.Phases.INACTIVE){
-                        element.activePhase = Shape.Phases.ACTIVE;
-                        element.lifeTime=UserConfiguration.lifeTime;
-                        element.resetColor();
+            try {
+                for (Shape element : container) {
+                    if (ShapeConverter.isClicked(click, element)) {
+                        if (element.activePhase == Shape.Phases.INACTIVE) {
+                            element.activePhase = Shape.Phases.ACTIVE;
+                            element.lifeTime = UserConfiguration.lifeTime;
+                            element.resetColor();
+                        } else {
+                            element.activePhase = Shape.Phases.INACTIVE;
+                        }
+                        break;
                     }
-                    else{
-                        element.activePhase= Shape.Phases.INACTIVE;
-                    }
-                    break;
                 }
-            }
-            map.repaint();
+                map.repaint();
+            } catch (ClassCastException e){
+                JDialog ioError = new JDialog();
+                ioError.setTitle("Error");
+                ioError.add(new JLabel("Select the correct radio button or import the correct configuration file",SwingConstants.CENTER));
+                ioError.setSize(500,100);
+                ioError.setResizable(false);
+                ioError.show();
+        }
         }
     }
 

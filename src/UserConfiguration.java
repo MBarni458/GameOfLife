@@ -1,5 +1,10 @@
+import com.google.gson.FieldNamingStrategy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.awt.*;
 import java.io.*;
+import java.lang.reflect.Field;
 
 public class UserConfiguration implements Serializable {
     enum TileShape{
@@ -58,7 +63,6 @@ public class UserConfiguration implements Serializable {
         bufferedWriter.write(id+";"+tileShape.toString()+";"+rowsOfTheMap+";"+columnsOfTheMap+";"+speedOfSimulation+";"+optimalPopulation+";"+underPopulation+";"+overPopulation+";"+lifeTime);
         bufferedWriter.close();
     }
-
     public static void loadConfiguration(File inputfile) throws IOException{
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(inputfile)));
         bufferedReader.readLine();
@@ -73,5 +77,7 @@ public class UserConfiguration implements Serializable {
         setUnderPopulation(Integer.parseInt(data[6]));
         setOverPopulation(Integer.parseInt(data[7]));
     }
+
+
 
 }
