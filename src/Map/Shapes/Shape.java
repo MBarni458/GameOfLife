@@ -104,8 +104,8 @@ public abstract  class Shape implements Serializable {
                 }
             }
             return container;
-        } catch (IOException | ClassNotFoundException e){
-            System.out.println("Unexpected IO error: "+e.getMessage());
+        } catch (Exception e){
+            System.out.println("Unexpected error: "+e.getMessage());
             return new ArrayList<>();
         }
     }
