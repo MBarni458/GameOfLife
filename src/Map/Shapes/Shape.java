@@ -97,8 +97,12 @@ public abstract  class Shape implements Serializable {
             UserConfiguration.setActiveSimulation(false);
             UserConfiguration.setRowsOfTheMap(rows.size());
             UserConfiguration.setColumnsOfTheMap(container.size()/rows.size());
-            System.out.println( "Sorok:"+UserConfiguration.rowsOfTheMap);
-            System.out.println( "Oszlopok:"+UserConfiguration.columnsOfTheMap);
+            if(container.size()>0){
+                switch (container.get(0).shape.xpoints.length){
+                    case 4 -> UserConfiguration.setTileShape(UserConfiguration.TileShape.SQUARE);
+                    case 6 -> UserConfiguration.setTileShape(UserConfiguration.TileShape.HEXAGON);
+                }
+            }
             return container;
         } catch (IOException | ClassNotFoundException e){
             System.out.println("Unexpected IO error: "+e.getMessage());
