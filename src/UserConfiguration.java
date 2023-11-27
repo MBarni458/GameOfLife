@@ -62,7 +62,8 @@ public class UserConfiguration implements Serializable {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(inputfile)));
             bufferedReader.readLine();
             String data[] = bufferedReader.readLine().split(";");
-            if(data.length!=7){
+            System.out.println(data.length);
+            if(data.length!=8){
                 throw new Exception("Incorrect File");
             }
             bufferedReader.close();
@@ -73,6 +74,7 @@ public class UserConfiguration implements Serializable {
             setOptimalPopulation(Integer.parseInt(data[4]));
             setUnderPopulation(Integer.parseInt(data[5]));
             setOverPopulation(Integer.parseInt(data[6]));
+            setLifetimeOfACell(Integer.parseInt(data[7]));
             return true;
         } catch (Exception e){
             JDialog ioError = new JDialog();
