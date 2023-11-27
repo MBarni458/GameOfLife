@@ -2,6 +2,7 @@ import com.google.gson.FieldNamingStrategy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.lang.reflect.Field;
@@ -56,17 +57,31 @@ public class UserConfiguration implements Serializable {
         bufferedWriter.write(tileShape.toString()+";"+rowsOfTheMap+";"+columnsOfTheMap+";"+speedOfSimulation+";"+optimalPopulation+";"+underPopulation+";"+overPopulation+";"+lifeTime);
         bufferedWriter.close();
     }
-    public static void loadConfiguration(File inputfile) throws IOException{
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(inputfile)));
-        bufferedReader.readLine();
-        String data[]= bufferedReader.readLine().split(";");
-        bufferedReader.close();
-        setTileShape(ShapeConverter.tileShapeSelector(data[0]));
-        setRowsOfTheMap(Integer.parseInt(data[1]));
-        setColumnsOfTheMap(Integer.parseInt(data[2]));
-        setSpeedOfSimulation(Integer.parseInt(data[3]));
-        setOptimalPopulation(Integer.parseInt(data[4]));
-        setUnderPopulation(Integer.parseInt(data[5]));
-        setOverPopulation(Integer.parseInt(data[6]));
+    public static boolean loadConfiguration(File inputfile) throws IOException{
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(inputfile)));
+            bufferedReader.readLine();
+            String data[] = bufferedReader.readLine().split(";");
+            if(data.length!=7){
+                throw new Exception("Incorrect File");
+            }
+            bufferedReader.close();
+            setTileShape(ShapeConverter.tileShapeSelector(data[0]));
+            setRowsOfTheMap(Integer.parseInt(data[1]));
+            setColumnsOfTheMap(Integer.parseInt(data[2]));
+            setSpeedOfSimulation(Integer.parseInt(data[3]));
+            setOptimalPopulation(Integer.parseInt(data[4]));
+            setUnderPopulation(Integer.parseInt(data[5]));
+            setOverPopulation(Integer.parseInt(data[6]));
+            return true;
+        } catch (Exception e){
+            JDialog ioError = new JDialog();
+            ioError.setTitle("Error");
+            ioError.add(new JLabel("Select a correct file",SwingConstants.CENTER));
+            ioError.setSize(500,100);
+            ioError.setResizable(false);
+            ioError.show();
+            return false;
+        }
     }
 }

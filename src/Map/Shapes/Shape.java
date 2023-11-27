@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public abstract  class Shape implements Serializable {
 
@@ -86,7 +87,19 @@ public abstract  class Shape implements Serializable {
     public static ArrayList<Shape> loadFigure(File inputFile){
         try {
             ObjectInputStream objectInputStream= new ObjectInputStream(new FileInputStream(inputFile));
-            return (ArrayList<Shape>) objectInputStream.readObject();
+            ArrayList<Shape> container =(ArrayList<Shape>) objectInputStream.readObject();
+            ArrayList<Integer> rows = new ArrayList<>();
+            for (Shape element: container){
+                if (!rows.contains(element.shape.ypoints[0])){
+                    rows.add(element.shape.ypoints[0]);
+                }
+            }
+            UserConfiguration.setActiveSimulation(false);
+            UserConfiguration.setRowsOfTheMap(rows.size());
+            UserConfiguration.setColumnsOfTheMap(container.size()/rows.size());
+            System.out.println( "Sorok:"+UserConfiguration.rowsOfTheMap);
+            System.out.println( "Oszlopok:"+UserConfiguration.columnsOfTheMap);
+            return container;
         } catch (IOException | ClassNotFoundException e){
             System.out.println("Unexpected IO error: "+e.getMessage());
             return new ArrayList<>();
